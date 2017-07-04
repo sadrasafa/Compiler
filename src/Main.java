@@ -13,8 +13,9 @@ public class Main {
         filePath = scanner.nextLine();
         ScannerCompiler myScanner = new ScannerCompiler(filePath);
         char a;
-        for (int i = 0; i < 100; i++) {
-            System.out.println(myScanner.readChar());
+        String token = "";
+        while (!(token = myScanner.getToken()).equals("EOF")) {
+            System.out.println(token + " ");
         }
     }
 }
