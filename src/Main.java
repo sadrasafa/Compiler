@@ -17,5 +17,7 @@ public class Main {
         while (!(token = myScanner.getToken()).equals("EOF")) {
             System.out.println(token + " ");
         }
+
+        Parser parser = new Parser();
     }
 }
