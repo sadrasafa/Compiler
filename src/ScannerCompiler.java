@@ -60,6 +60,7 @@ public class ScannerCompiler {
         seperators.add('=');
         seperators.add('<');
         seperators.add(' ');
+        seperators.add('\n');
 
         invalidInVarOrNum.add('@');
         invalidInVarOrNum.add('$');
