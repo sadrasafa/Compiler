@@ -11,11 +11,12 @@ public class ScannerCompiler {
 
     String fileName;
     File file;
+    String lastToken = "";
     InputStream inputStream;
     Charset charset = Charset.defaultCharset();
     Reader buffer, reader;
 
-    ArrayList<Character> seperators = new ArrayList<>();
+    ArrayList<Character> separators = new ArrayList<>();
 
     ArrayList<Character> invalidInVarOrNum = new ArrayList<>();
 
@@ -44,23 +45,24 @@ public class ScannerCompiler {
             System.out.println("No file found!");
         }
 
-        seperators.add(';');
-        seperators.add(',');
-        seperators.add('}');
-        seperators.add('{');
-        seperators.add('(');
-        seperators.add(')');
-        seperators.add('[');
-        seperators.add(']');
-        seperators.add('+');
-        seperators.add('-');
-        seperators.add('*');
-        seperators.add('/');
-        seperators.add('&');
-        seperators.add('=');
-        seperators.add('<');
-        seperators.add(' ');
-        seperators.add('\n');
+        separators.add(';');
+        separators.add(',');
+        separators.add('}');
+        separators.add('{');
+        separators.add('(');
+        separators.add(')');
+        separators.add('[');
+        separators.add(']');
+        separators.add('+');
+        separators.add('-');
+        separators.add('*');
+        separators.add('/');
+        separators.add('&');
+        separators.add('=');
+        separators.add('<');
+        separators.add(' ');
+        separators.add('\n');
+        separators.add((char) 13);
 
         invalidInVarOrNum.add('@');
         invalidInVarOrNum.add('$');
@@ -75,6 +77,10 @@ public class ScannerCompiler {
 
         System.out.println("code = " + code);
 
+        for (int i = 0; i < code.length(); i++) {
+            System.out.println((int) code.charAt(i));
+        }
+
     }
 
 
@@ -87,8 +93,10 @@ public class ScannerCompiler {
 
     public String getToken() throws IOException {
 
-        System.out.println("lookahead = " + lookahead);
+//        System.out.println("lookahead = " + lookahead);
         String token = null;
+        System.out.println("lastToken = " + lastToken);
+        String returningToken = "";
 
 
         char inputChar;
@@ -96,51 +104,74 @@ public class ScannerCompiler {
         while (Character.isWhitespace(inputChar = readChar())) ;
         char nextChar;
 
-        if (seperators.contains(inputChar)) {
+        if (separators.contains(inputChar)) {
             switch (inputChar) {
                 case '+':
-                    return "PLUS";
-
+                    if(lastToken.equals("ID") ||
+                            lastToken.equals("NUM") ||
+                            lastToken.equals("RIGHTPAR") ||
+                            lastToken.equals("RIGHTBRACKET")) {
+                        returningToken = "PLUS"; // TODO: 04/07/17 -5 + 3 -> MIUNUS 5 PLUS 3 :\
+                    }
+                    break;
                 case '-':
-                    return "MINUS"; // TODO: 04/07/17 -5 + 3 -> MIUNUS 5 PLUS 3 :\
+                    if(lastToken.equals("ID") ||
+                            lastToken.equals("NUM") ||
+                            lastToken.equals("RIGHTPAR") ||
+                            lastToken.equals("RIGHTBRACKET")) {
+                        returningToken = "MINUS"; // TODO: 04/07/17 -5 + 3 -> MIUNUS 5 PLUS 3 :\
+                    }
+                    break;
 
                 case '(':
-                    return "LEFTPAR";
-
+                    returningToken = "LEFTPAR";
+                    break;
                 case ')':
-                    return "RIGHTPAR";
-
+                    returningToken = "RIGHTPAR";
+                    break;
                 case '[':
-                    return "LEFTBRACKET";
-
+                    returningToken = "LEFTBRACKET";
+                    break;
                 case ']':
-                    return "RIGHTBRACKET";
-
+                    returningToken = "RIGHTBRACKET";
+                    break;
                 case '{':
-                    return "LEFTAK";
-
+                    returningToken = "LEFTAK";
+                    break;
                 case '}':
-                    return "RIGHTAK";
-
+                    returningToken = "RIGHTAK";
+                    break;
                 case '*':
-                    return "TIMES";
-
+                    returningToken = "TIMES";
+                    break;
                 case '/':
-                    return "DIVIDED";
-
+                    nextChar = readChar();
+                    if (nextChar == '*') {
+//                        boolean found = false;
+                        while (true) {
+                            while ((readChar()) != '*') ;
+                            if ((readChar()) == '/') {
+                                return getToken();
+                            }
+                        }
+                    } else {
+                        lookahead--;
+                        returningToken = "DIVIDED";
+                    }
+                    break;
                 case ';':
-                    return "SEMICOLON";
-
+                    returningToken = "SEMICOLON";
+                    break;
                 case ',':
-                    return "COMMA";
-
+                    returningToken = "COMMA";
+                    break;
                 case '<':
-                    return "LESSTHAN";
-
+                    returningToken = "LESSTHAN";
+                    break;
                 case '&':
                     nextChar = readChar();
                     if (nextChar == '&')
-                        return "AND";
+                        returningToken = "AND";
                     else {
                         // TODO: 04/07/17 ERROR! No & operator!
                     }
@@ -148,68 +179,63 @@ public class ScannerCompiler {
                 case '=':
                     nextChar = readChar();
                     if (nextChar == '=')
-                        return "EQUALS";
+                        returningToken = "EQUALS";
                     else {
                         lookahead--;
-                        return "ASSIGNMENT";
+                        returningToken = "ASSIGNMENT";
                     }
+                    break;
             }
 
         }
+        if(returningToken.equals("")) {
 
-        //not keyword
-
-        if (Character.isLetter(inputChar)) {
-            lookahead--;
-            token = getVar();
-        } else if (Character.isDigit(inputChar)) {
-            lookahead--;
-            token = getNum();
-        }
+            //not keyword
+            System.out.println("ENTERED");
+            if (Character.isLetter(inputChar)) {
+                lookahead--;
+                token = getVar();
+            } else if (Character.isDigit(inputChar) || inputChar == '-' || inputChar == '+') {
+                lookahead--;
+                token = getNum();
+            }
 //        token = token.substring(0, token.length() - 1);
 
-        System.out.println("token = " + token);
+            System.out.println("token = " + token);
 
-        if (token.matches("[a-zA-Z][\\w\\d]*")) {
+            if (token.matches("[a-zA-Z][\\w\\d]*")) {
 
-            if (token.equals("if")) {
-                return "IF";
-            } else if (token.equals("else")) {
-                return "ELSE";
-            } else if (token.equals("while")) {
-                return "WHILE";
-            } else if (token.equals("void")) {
-                return "VOID";
-            } else if (token.equals("int")) {
-                return "INT";
-            } else if (token.equals("return")) {
-                return "RETURN";
-            } else if (token.equals("EOF")) {
-                return "EOF";
+                if (token.equals("if")) {
+                    returningToken = "IF";
+                } else if (token.equals("else")) {
+                    returningToken = "ELSE";
+                } else if (token.equals("while")) {
+                    returningToken = "WHILE";
+                } else if (token.equals("void")) {
+                    returningToken = "VOID";
+                } else if (token.equals("int")) {
+                    returningToken = "INT";
+                } else if (token.equals("return")) {
+                    returningToken = "RETURN";
+                } else if (token.equals("EOF")) {
+                    returningToken = "EOF";
+                } else {
+                    returningToken = "ID";
+                }
+
+            } else if (token.matches("[+-]?\\d+")) {
+                returningToken = "NUM";
+            } else {
+                // TODO: 04/07/17 ERROR!!
             }
 
-            return "ID";
 
-        } else if (token.matches("[+-]?\\d+")) {
-            return "NUM";
-        } else {
-            // TODO: 04/07/17 ERROR!!
         }
+        if (token != null && token.equals(""))
+            returningToken = getToken();
 
-        /*
-        if (Character.isLetter(inputChar)) {
-            while (!seperators.contains(inputChar)) {
-                token += inputChar;
-                inputChar = readChar();
-            }
-            if (lookahead > 0)
-                lookahead--;
-        } else if (Character.isDigit(inputChar)) {
-            while
-        }
-        */
-        return token;
-
+        lastToken = returningToken;
+        return returningToken;
     }
 
     private String getVar() throws IOException {
@@ -219,7 +245,7 @@ public class ScannerCompiler {
 
         inputChar = readChar();
 
-        while (lookahead < code.length() && !seperators.contains(inputChar)) {
+        while (lookahead < code.length() && !separators.contains(inputChar)) {
 
 
             token += inputChar;
@@ -243,12 +269,17 @@ public class ScannerCompiler {
         String token = "";
         char inputChar;
         String temp = "";
+        boolean sign = false;
 
         inputChar = readChar();
 
-        while (lookahead < code.length() && !seperators.contains(inputChar)) {
+        if(inputChar == '-' || inputChar == '+'){
+            sign = true;
+        }
 
+        while (lookahead < code.length() && (!separators.contains(inputChar) || sign)) {
 
+            sign = false;
             token += inputChar;
             inputChar = readChar();
 //            System.out.println("token temp = " + token);
