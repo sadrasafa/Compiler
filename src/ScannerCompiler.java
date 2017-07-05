@@ -1,8 +1,5 @@
-import com.sun.xml.internal.bind.v2.TODO;
-
 import java.io.*;
 import java.nio.charset.Charset;
-import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 
 /**
@@ -19,6 +16,8 @@ public class ScannerCompiler {
     Reader buffer, reader;
 
     ArrayList<Character> seperators = new ArrayList<>();
+
+    ArrayList<Character> invalidInVarOrNum = new ArrayList<>();
 
     String code = "";
 
@@ -58,9 +57,20 @@ public class ScannerCompiler {
         seperators.add('*');
         seperators.add('/');
         seperators.add('&');
-        seperators.add('$');
         seperators.add('=');
         seperators.add(' ');
+
+        invalidInVarOrNum.add('@');
+        invalidInVarOrNum.add('$');
+        invalidInVarOrNum.add('!'); // what about '!=' ?
+        invalidInVarOrNum.add('%');
+        invalidInVarOrNum.add('^');
+        invalidInVarOrNum.add('&');          //no rightBracket
+        invalidInVarOrNum.add('{');
+        invalidInVarOrNum.add('}');
+        invalidInVarOrNum.add('~');
+
+
 
         System.out.println("code = " + code);
 
@@ -77,7 +87,7 @@ public class ScannerCompiler {
     public String getToken() throws IOException {
 
 //        System.out.println("lookahead = " + lookahead);
-        String token = "";
+        String token = null;
 
 
 
@@ -146,12 +156,13 @@ public class ScannerCompiler {
 
         //not keyword
 
-        while (lookahead < code.length() && !seperators.contains(inputChar)) {
-            token += inputChar;
-            inputChar = readChar();
+        if(Character.isLetter(inputChar)){
+            lookahead--;
+            token = getVar();
+        } else if(Character.isDigit(inputChar)){
+            lookahead--;
+            token = getNum();
         }
-        lookahead--;
-
 //        token = token.substring(0, token.length() - 1);
 
         System.out.println("token = " + token);
@@ -186,8 +197,62 @@ public class ScannerCompiler {
             while
         }
         */
-        return null;
+        return token;
 
+    }
+
+    private String getVar() throws IOException {
+
+        String token = "";
+        char inputChar;
+
+        inputChar = readChar();
+
+        while (lookahead < code.length() && !seperators.contains(inputChar)) {
+
+
+            token += inputChar;
+            inputChar = readChar();
+
+//            System.out.println("token temp = " + token);
+
+            if(invalidInVarOrNum.contains(inputChar)){
+                token = "";
+                inputChar = readChar();
+            }
+        }
+        lookahead--;
+
+        return token;
+    }
+
+
+
+    private String getNum() throws IOException {
+
+        String token = "";
+        char inputChar;
+        String temp = "";
+
+        inputChar = readChar();
+
+        while (lookahead < code.length() && !seperators.contains(inputChar)) {
+
+
+            token += inputChar;
+            inputChar = readChar();
+//            System.out.println("token temp = " + token);
+            temp = "" + inputChar;
+            if(invalidInVarOrNum.contains(inputChar) || temp.matches("[a-zA-Z]")){
+                token = "";
+                inputChar = readChar();
+
+            }
+
+        }
+        lookahead--;
+
+        return token;
     }
 
 }
