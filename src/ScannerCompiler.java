@@ -58,6 +58,7 @@ public class ScannerCompiler {
         seperators.add('/');
         seperators.add('&');
         seperators.add('=');
+        seperators.add('<');
         seperators.add(' ');
 
         invalidInVarOrNum.add('@');
@@ -69,7 +70,6 @@ public class ScannerCompiler {
         invalidInVarOrNum.add('{');
         invalidInVarOrNum.add('}');
         invalidInVarOrNum.add('~');
-
 
 
         System.out.println("code = " + code);
@@ -86,9 +86,8 @@ public class ScannerCompiler {
 
     public String getToken() throws IOException {
 
-//        System.out.println("lookahead = " + lookahead);
+        System.out.println("lookahead = " + lookahead);
         String token = null;
-
 
 
         char inputChar;
@@ -134,6 +133,9 @@ public class ScannerCompiler {
                 case ',':
                     return "COMMA";
 
+                case '<':
+                    return "LESSTHAN";
+
                 case '&':
                     nextChar = readChar();
                     if (nextChar == '&')
@@ -156,10 +158,10 @@ public class ScannerCompiler {
 
         //not keyword
 
-        if(Character.isLetter(inputChar)){
+        if (Character.isLetter(inputChar)) {
             lookahead--;
             token = getVar();
-        } else if(Character.isDigit(inputChar)){
+        } else if (Character.isDigit(inputChar)) {
             lookahead--;
             token = getNum();
         }
@@ -173,7 +175,15 @@ public class ScannerCompiler {
                 return "IF";
             } else if (token.equals("else")) {
                 return "ELSE";
-            } else if(token.equals("EOF")){
+            } else if (token.equals("while")) {
+                return "WHILE";
+            } else if (token.equals("void")) {
+                return "VOID";
+            } else if (token.equals("int")) {
+                return "INT";
+            } else if (token.equals("return")) {
+                return "RETURN";
+            } else if (token.equals("EOF")) {
                 return "EOF";
             }
 
@@ -216,7 +226,7 @@ public class ScannerCompiler {
 
 //            System.out.println("token temp = " + token);
 
-            if(invalidInVarOrNum.contains(inputChar)){
+            if (invalidInVarOrNum.contains(inputChar)) {
                 token = "";
                 inputChar = readChar();
             }
@@ -225,7 +235,6 @@ public class ScannerCompiler {
 
         return token;
     }
-
 
 
     private String getNum() throws IOException {
@@ -243,7 +252,7 @@ public class ScannerCompiler {
             inputChar = readChar();
 //            System.out.println("token temp = " + token);
             temp = "" + inputChar;
-            if(invalidInVarOrNum.contains(inputChar) || temp.matches("[a-zA-Z]")){
+            if (invalidInVarOrNum.contains(inputChar) || temp.matches("[a-zA-Z]")) {
                 token = "";
                 inputChar = readChar();
 
