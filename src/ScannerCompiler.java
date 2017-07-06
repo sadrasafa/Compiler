@@ -81,11 +81,6 @@ public class ScannerCompiler {
 
 
         System.out.println("code = " + code);
-
-        for (int i = 0; i < code.length(); i++) {
-            System.out.println((int) code.charAt(i));
-        }
-
     }
 
 
@@ -224,7 +219,7 @@ public class ScannerCompiler {
             }
 //        token = token.substring(0, token.length() - 1);
 
-            System.out.println("token = " + token);
+//            System.out.println("token = " + token);
 
             if (token.matches("[a-zA-Z][\\w\\d]*")) {
 

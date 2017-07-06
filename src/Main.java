@@ -17,6 +17,8 @@ public class Main {
         while (!(token = myScanner.getToken().print()).equals("<EOF, 5>")) {
             System.out.println(token + " ");
         }
+        System.out.println("************************************");
+        System.out.println("SYMBOL TABLE");
 
         ScannerCompiler.symbolTable.print();
 
