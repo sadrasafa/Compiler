@@ -5,8 +5,12 @@ public class SymbolTableEntry {
     String name;
     int value;
     int scope;
-    int address;
     String type;
+
+    public SymbolTableEntry(String name, String type){
+        this.name = name;
+        this.type = type;
+    }
 
     public String getType() {
         return type;
@@ -40,11 +44,7 @@ public class SymbolTableEntry {
         this.scope = scope;
     }
 
-    public int getAddress() {
-        return address;
-    }
-
-    public void setAddress(int address) {
-        this.address = address;
+    public String print(){
+        return "" + name + " " + type + " ";
     }
 }

@@ -16,6 +16,8 @@ public class ScannerCompiler {
     Charset charset = Charset.defaultCharset();
     Reader buffer, reader;
 
+    static SymbolTable symbolTable;
+
     ArrayList<Character> separators = new ArrayList<>();
 
     ArrayList<Character> invalidInVarOrNum = new ArrayList<>();
@@ -24,12 +26,15 @@ public class ScannerCompiler {
 
     int lookahead;
 
+
     public ScannerCompiler(String fileName) throws FileNotFoundException {
         this.fileName = fileName;
         file = new File(fileName);
         inputStream = new FileInputStream(file);
         reader = new InputStreamReader(inputStream, charset);
         buffer = new BufferedReader(reader);
+
+        symbolTable = new SymbolTable();
 
         lookahead = 0;
 
@@ -91,11 +96,12 @@ public class ScannerCompiler {
     }
 
 
-    public String getToken() throws IOException {
+    public Token getToken() throws IOException {
 
 //        System.out.println("lookahead = " + lookahead);
         String token = null;
-        System.out.println("lastToken = " + lastToken);
+        int attr = 0;
+//        System.out.println("lastToken = " + lastToken);
         String returningToken = "";
 
 
@@ -110,8 +116,9 @@ public class ScannerCompiler {
                     if(lastToken.equals("ID") ||
                             lastToken.equals("NUM") ||
                             lastToken.equals("RIGHTPAR") ||
-                            lastToken.equals("RIGHTBRACKET")) {
-                        returningToken = "PLUS"; // TODO: 04/07/17 -5 + 3 -> MIUNUS 5 PLUS 3 :\
+                            lastToken.equals("RIGHTBRACKET") && Character.isDigit(readChar())) {
+//                        returningToken = "PLUS";
+                        return new Token("PLUS", 0);
                     }
                     break;
                 case '-':
@@ -119,31 +126,40 @@ public class ScannerCompiler {
                             lastToken.equals("NUM") ||
                             lastToken.equals("RIGHTPAR") ||
                             lastToken.equals("RIGHTBRACKET")) {
-                        returningToken = "MINUS"; // TODO: 04/07/17 -5 + 3 -> MIUNUS 5 PLUS 3 :\
+//                        returningToken = "MINUS";
+                        return new Token("MINUS", 0);
+
                     }
                     break;
 
                 case '(':
-                    returningToken = "LEFTPAR";
-                    break;
+                    return new Token("LEFTPAR", 0);
+//                returningToken = "LEFTPAR";
+//                    break;
                 case ')':
-                    returningToken = "RIGHTPAR";
-                    break;
+                    return new Token("RIGHTPAR", 0);
+//                    returningToken = "RIGHTPAR";
+//                    break;
                 case '[':
-                    returningToken = "LEFTBRACKET";
-                    break;
+                    return new Token("LEFTBRACKET", 0);
+//                    returningToken = "LEFTBRACKET";
+//                    break;
                 case ']':
-                    returningToken = "RIGHTBRACKET";
-                    break;
+                    return new Token("RIGHTBRACKET", 0);
+//                    returningToken = "RIGHTBRACKET";
+//                    break;
                 case '{':
-                    returningToken = "LEFTAK";
-                    break;
+                    return new Token("LEFTAK", 0);
+//                    returningToken = "LEFTAK";
+//                    break;
                 case '}':
-                    returningToken = "RIGHTAK";
-                    break;
+                    return new Token("RIGHTAK", 0);
+//                    returningToken = "RIGHTAK";
+//                    break;
                 case '*':
-                    returningToken = "TIMES";
-                    break;
+                    return new Token("TIMES", 0);
+//                    returningToken = "TIMES";
+//                    break;
                 case '/':
                     nextChar = readChar();
                     if (nextChar == '*') {
@@ -156,22 +172,27 @@ public class ScannerCompiler {
                         }
                     } else {
                         lookahead--;
-                        returningToken = "DIVIDED";
+                        return new Token("DIVIDED", 0);
+//                        returningToken = "DIVIDED";
                     }
-                    break;
+//                    break;
                 case ';':
-                    returningToken = "SEMICOLON";
-                    break;
+                    return new Token("SEMICOLON", 0);
+//                    returningToken = "SEMICOLON";
+//                    break;
                 case ',':
-                    returningToken = "COMMA";
-                    break;
+                    return new Token("COMMA", 0);
+//                    returningToken = "COMMA";
+//                    break;
                 case '<':
-                    returningToken = "LESSTHAN";
-                    break;
+                    return new Token("LESSTHAN", 0);
+//                    returningToken = "LESSTHAN";
+//                    break;
                 case '&':
                     nextChar = readChar();
                     if (nextChar == '&')
-                        returningToken = "AND";
+                        return new Token("AND", 0);
+//                        returningToken = "AND";
                     else {
                         // TODO: 04/07/17 ERROR! No & operator!
                     }
@@ -179,19 +200,21 @@ public class ScannerCompiler {
                 case '=':
                     nextChar = readChar();
                     if (nextChar == '=')
-                        returningToken = "EQUALS";
+                        return new Token("EQUALS", 0);
+//                        returningToken = "EQUALS";
                     else {
                         lookahead--;
-                        returningToken = "ASSIGNMENT";
+                        return new Token("ASSIGNMENT", 0);
+//                        returningToken = "ASSIGNMENT";
                     }
-                    break;
+//                    break;
             }
 
         }
         if(returningToken.equals("")) {
 
             //not keyword
-            System.out.println("ENTERED");
+//            System.out.println("ENTERED");
             if (Character.isLetter(inputChar)) {
                 lookahead--;
                 token = getVar();
@@ -225,6 +248,7 @@ public class ScannerCompiler {
 
             } else if (token.matches("[+-]?\\d+")) {
                 returningToken = "NUM";
+                return new Token(returningToken, Integer.parseInt(token));
             } else {
                 // TODO: 04/07/17 ERROR!!
             }
@@ -232,10 +256,17 @@ public class ScannerCompiler {
 
         }
         if (token != null && token.equals(""))
-            returningToken = getToken();
+            return getToken();
+
+
+        if(token != null && !token.equals("") && !returningToken.equals("NUM")){
+            attr = symbolTable.check(token, returningToken);
+        }
+
 
         lastToken = returningToken;
-        return returningToken;
+        return new Token(returningToken, attr);
+//        return returningToken;
     }
 
     private String getVar() throws IOException {

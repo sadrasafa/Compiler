@@ -14,9 +14,11 @@ public class Main {
         ScannerCompiler myScanner = new ScannerCompiler(filePath);
         char a;
         String token = "";
-        while (!(token = myScanner.getToken()).equals("EOF")) {
+        while (!(token = myScanner.getToken().print()).equals("<EOF, 5>")) {
             System.out.println(token + " ");
         }
+
+        ScannerCompiler.symbolTable.print();
 
         Parser parser = new Parser();
     }
