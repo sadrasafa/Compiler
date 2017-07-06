@@ -2,10 +2,19 @@
  * Created by aarash on 05/07/17.
  */
 public class SymbolTableEntry {
-    String name;
-    int value;
-    int scope;
-    String type;
+    private String name;
+    private int value;
+    private int scope;
+    private String type;
+    private int address;
+
+    public int getAddress() {
+        return address;
+    }
+
+    public void setAddress(int address) {
+        this.address = address;
+    }
 
     public SymbolTableEntry(String name, String type){
         this.name = name;
