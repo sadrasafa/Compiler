@@ -1,23 +1,22 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by aarash on 05/07/17.
  */
 public class SymbolTable {
 
-    ArrayList<SymbolTableEntry> st = new ArrayList<>();
+    ArrayList<SymbolTableEntry> symbolTable = new ArrayList<>();
 
     public SymbolTable() {
-        st = new ArrayList<>();
+        symbolTable = new ArrayList<>();
 
-        st.add(new SymbolTableEntry("if", "IF"));
-        st.add(new SymbolTableEntry("while", "WHILE"));
-        st.add(new SymbolTableEntry("else", "ELSE"));
-        st.add(new SymbolTableEntry("output", "ID"));
-        st.add(new SymbolTableEntry("return", "RETURN"));
-        st.add(new SymbolTableEntry("EOF", "EOF"));
-        st.add(new SymbolTableEntry("int", "INT"));
+        symbolTable.add(new SymbolTableEntry("if", "IF"));
+        symbolTable.add(new SymbolTableEntry("while", "WHILE"));
+        symbolTable.add(new SymbolTableEntry("else", "ELSE"));
+        symbolTable.add(new SymbolTableEntry("output", "ID"));
+        symbolTable.add(new SymbolTableEntry("return", "RETURN"));
+        symbolTable.add(new SymbolTableEntry("EOF", "EOF"));
+        symbolTable.add(new SymbolTableEntry("int", "INT"));
 
         // TODO: 05/07/17 fill table
     }
@@ -25,18 +24,18 @@ public class SymbolTable {
     public int check(String idName, String type) {
         boolean found = false;
         int index = -1;
-        for (SymbolTableEntry ste : st) {
+        for (SymbolTableEntry ste : symbolTable) {
             if (ste.getName().equals(idName)) {
                 found = true;
-                index = st.indexOf(ste);
+                index = symbolTable.indexOf(ste);
             }
         }
 
         if (found) {
             return index;
         } else {
-            st.add(new SymbolTableEntry(idName, type));
-            return st.size() - 1;
+            symbolTable.add(new SymbolTableEntry(idName, type));
+            return symbolTable.size() - 1;
         }
 
 
@@ -46,9 +45,19 @@ public class SymbolTable {
 
     }
 
+    public int findAddr(String name){
+        int address = -1;
+        for (SymbolTableEntry ste : symbolTable) {
+            if(name.equals(ste.getName())){
+                address = ste.getAddress();
+            }
+        }
+        return address;
+    }
+
 
     public void print(){
-        for (SymbolTableEntry ste: st) {
+        for (SymbolTableEntry ste: symbolTable) {
             System.out.println("ste = " + ste.print());
         }
     }
