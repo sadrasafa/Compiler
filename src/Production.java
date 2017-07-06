@@ -31,9 +31,17 @@ public class Production {
         this.number = No++;
     }
     public void printProduction() {
-        System.out.print(getNumber()+": " +getLHS().getName()+" -> ");
+//        System.out.print(getNumber()+": " +getLHS().getName()+" -> ");
+        System.out.print(getLHS().getName()+" -> ");
         for (int i = 0; i < getRHS().length; i++) {
             System.out.print(getRHS()[i].getName()+" ");
+        }
+        System.out.println();
+    }
+    public void printProductionPox() {
+        System.out.print(getLHS().getPox()+" -> ");
+        for (int i = 0; i < getRHS().length; i++) {
+            System.out.print(getRHS()[i].getPox()+" ");
         }
         System.out.println();
     }

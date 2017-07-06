@@ -62,11 +62,28 @@ public class ItemSet {
             item.printItem();
         }
         for (Map.Entry<Symbol, ItemSet> pair: map.entrySet()) {
-            System.out.println("FROM "+number);
             System.out.println("__________________");
+            System.out.println("FROM "+number);
             System.out.println(pair.getKey().getName());
             pair.getValue().printItemSet();
         }
+//        for (Map.Entry<Symbol, ItemSet> pair: map.entrySet()) {
+//            System.out.print(getNumber() + " -> " + pair.getValue().getNumber());
+//        }
+    }
+    public void poxiGorsat() {
+        System.out.print(getNumber()+" -> ");
+        for (Map.Entry<Symbol, ItemSet> pair: map.entrySet()) {
+            System.out.print(pair.getValue().getNumber() + ", ");
+        }
+        System.out.println();
+    }
+    public void showThisItemSet() {
+        System.out.println(getNumber()+" : ");
+        for (Item item: items) {
+            item.printItem();
+        }
+        System.out.println("__________________");
     }
 
     public HashMap<Symbol, ItemSet> getMap() {

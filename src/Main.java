@@ -8,20 +8,20 @@ import java.util.Scanner;
  */
 public class Main {
     public static void main(String[] args) throws IOException {
-        String filePath = "";
-        Scanner scanner = new Scanner(System.in);
-        filePath = scanner.nextLine();
+        String filePath = "/home/safa/scannerTest/test_v4.c";
+//        Scanner scanner = new Scanner(System.in);
+//        filePath = scanner.nextLine();
         ScannerCompiler myScanner = new ScannerCompiler(filePath);
         char a;
         String token = "";
-        while (!(token = myScanner.getToken().print()).equals("<EOF, 5>")) {
-            System.out.println(token + " ");
-        }
-        System.out.println("************************************");
-        System.out.println("SYMBOL TABLE");
+//        while (!(token = myScanner.getToken().print()).equals("<EOF, 5>")) {
+//            System.out.println(token + " ");
+//        }
+//        System.out.println("************************************");
+//        System.out.println("SYMBOL TABLE");
 
-        ScannerCompiler.symbolTable.print();
+//        ScannerCompiler.symbolTable.print();
 
-        Parser parser = new Parser();
+        Parser parser = new Parser(myScanner);
     }
 }

@@ -4,6 +4,9 @@ import java.util.ArrayList;
  * Created by safa on 7/4/17.
  */
 public class Symbol {
+    static int generalPox = '@';
+    static int terminalPox = 'a';
+    int pox;
     private String name;
     private boolean terminal;
     private boolean firstChecked;
@@ -18,6 +21,38 @@ public class Symbol {
         followChecked = false;
         first = new ArrayList<>();
         follow = new ArrayList<>();
+        if(!terminal) {
+            pox = generalPox++;
+            if (pox ==91) {
+                pox = '@';
+            }
+            else if (pox == 92) {
+                pox = '#';
+            }
+            else if (pox == 93) {
+                pox = '$';
+            }
+            else if (pox == 94) {
+                pox = '%';
+            }
+            else if (pox == 95) {
+                pox = '^';
+            }
+            else if (pox == 96) {
+                pox = '&';
+            }
+            else if (pox == 97) {
+                pox = '_';
+            }
+        }
+        else
+            pox = terminalPox++;
+    }
+
+    public String getPox() {
+        String s = "";
+
+        return s+=(char)pox;
     }
 
     public boolean isFirstChecked() {
@@ -38,6 +73,10 @@ public class Symbol {
 
     public ArrayList<Symbol> getFirst() {
         return first;
+    }
+
+    public void setFollow(ArrayList<Symbol> follow) {
+        this.follow = follow;
     }
 
     public void setFirst(ArrayList<Symbol> first) {

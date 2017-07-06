@@ -6,8 +6,8 @@ public class ParseAction {
     public static final int REDUCE = 1;
     public static final int GOTO = 2;
     public static final int ACC = 3;
-    int type;
-    int dest;
+    private int type;
+    private int dest;
 
     public ParseAction(int type, int dest) {
         this.type = type;
@@ -28,5 +28,29 @@ public class ParseAction {
         }
         System.out.print(" "+ dest);
     }
+    public String getActionText() {
+        String toReturn = "";
+        if (type==SHIFT) {
+            toReturn += "SHIFT";
+        }
+        else if (type == REDUCE) {
+            toReturn += "REDUCE";
+        }
+        else if (type==GOTO){
+            toReturn += "GOTO";
+        }
+        else {
+            toReturn += "ACC";
+        }
+        toReturn += (" "+dest);
+        return toReturn;
+    }
 
+    public int getType() {
+        return type;
+    }
+
+    public int getDest() {
+        return dest;
+    }
 }

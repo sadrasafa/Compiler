@@ -15,7 +15,7 @@ public class ScannerCompiler {
     InputStream inputStream;
     Charset charset = Charset.defaultCharset();
     Reader buffer, reader;
-
+    boolean EOFGordum = false;
     static SymbolTable symbolTable;
 
     ArrayList<Character> separators = new ArrayList<>();
@@ -92,7 +92,9 @@ public class ScannerCompiler {
 
 
     public Token getToken(){
-
+        if (EOFGordum) {
+            return new Token("$", 0, "$");
+        }
 //        System.out.println("lookahead = " + lookahead);
         String token = null;
         int attr = 0;
@@ -237,6 +239,7 @@ public class ScannerCompiler {
                     returningToken = "return";
                 } else if (token.equals("EOF")) {
                     returningToken = "EOF";
+                    EOFGordum = true;
                 } else {
                     returningToken = "ID";
                 }
