@@ -4,10 +4,16 @@
 public class Token {
     String type;
     int attr;
+    Symbol symbol;
 
-    public Token(String type, int attr) {
+    public Token(String type, int attr, String symbolName) {
         this.type = type;
         this.attr = attr;
+        symbol = new Symbol(symbolName, true);
+    }
+
+    public Symbol getSymbol() {
+        return symbol;
     }
 
     public String print(){

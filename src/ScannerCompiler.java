@@ -84,14 +84,14 @@ public class ScannerCompiler {
     }
 
 
-    private char readChar() throws IOException {
+    private char readChar() {
         char toReturn = code.charAt(lookahead);
         lookahead++;
         return toReturn;
     }
 
 
-    public Token getToken() throws IOException {
+    public Token getToken(){
 
 //        System.out.println("lookahead = " + lookahead);
         String token = null;
@@ -113,7 +113,7 @@ public class ScannerCompiler {
                             lastToken.equals("RIGHTPAR") ||
                             lastToken.equals("RIGHTBRACKET") && Character.isDigit(readChar())) {
 //                        returningToken = "PLUS";
-                        return new Token("PLUS", 0);
+                        return new Token("PLUS", 0, "+");
                     }
                     break;
                 case '-':
@@ -122,37 +122,37 @@ public class ScannerCompiler {
                             lastToken.equals("RIGHTPAR") ||
                             lastToken.equals("RIGHTBRACKET")) {
 //                        returningToken = "MINUS";
-                        return new Token("MINUS", 0);
+                        return new Token("MINUS", 0, "-");
 
                     }
                     break;
 
                 case '(':
-                    return new Token("LEFTPAR", 0);
+                    return new Token("LEFTPAR", 0, "(");
 //                returningToken = "LEFTPAR";
 //                    break;
                 case ')':
-                    return new Token("RIGHTPAR", 0);
+                    return new Token("RIGHTPAR", 0, ")");
 //                    returningToken = "RIGHTPAR";
 //                    break;
                 case '[':
-                    return new Token("LEFTBRACKET", 0);
+                    return new Token("LEFTBRACKET", 0, "[");
 //                    returningToken = "LEFTBRACKET";
 //                    break;
                 case ']':
-                    return new Token("RIGHTBRACKET", 0);
+                    return new Token("RIGHTBRACKET", 0, "]");
 //                    returningToken = "RIGHTBRACKET";
 //                    break;
                 case '{':
-                    return new Token("LEFTAK", 0);
+                    return new Token("LEFTAK", 0, "{");
 //                    returningToken = "LEFTAK";
 //                    break;
                 case '}':
-                    return new Token("RIGHTAK", 0);
+                    return new Token("RIGHTAK", 0, "}");
 //                    returningToken = "RIGHTAK";
 //                    break;
                 case '*':
-                    return new Token("TIMES", 0);
+                    return new Token("TIMES", 0, "*");
 //                    returningToken = "TIMES";
 //                    break;
                 case '/':
@@ -167,26 +167,26 @@ public class ScannerCompiler {
                         }
                     } else {
                         lookahead--;
-                        return new Token("DIVIDED", 0);
+                        return new Token("DIVIDED", 0, "/");
 //                        returningToken = "DIVIDED";
                     }
 //                    break;
                 case ';':
-                    return new Token("SEMICOLON", 0);
+                    return new Token("SEMICOLON", 0, ";");
 //                    returningToken = "SEMICOLON";
 //                    break;
                 case ',':
-                    return new Token("COMMA", 0);
+                    return new Token("COMMA", 0, ",");
 //                    returningToken = "COMMA";
 //                    break;
                 case '<':
-                    return new Token("LESSTHAN", 0);
+                    return new Token("LESSTHAN", 0, "<");
 //                    returningToken = "LESSTHAN";
 //                    break;
                 case '&':
                     nextChar = readChar();
                     if (nextChar == '&')
-                        return new Token("AND", 0);
+                        return new Token("AND", 0, "&&");
 //                        returningToken = "AND";
                     else {
                         // TODO: 04/07/17 ERROR! No & operator!
@@ -195,11 +195,11 @@ public class ScannerCompiler {
                 case '=':
                     nextChar = readChar();
                     if (nextChar == '=')
-                        return new Token("EQUALS", 0);
+                        return new Token("EQUALS", 0, "==");
 //                        returningToken = "EQUALS";
                     else {
                         lookahead--;
-                        return new Token("ASSIGNMENT", 0);
+                        return new Token("ASSIGNMENT", 0, "=");
 //                        returningToken = "ASSIGNMENT";
                     }
 //                    break;
@@ -224,17 +224,17 @@ public class ScannerCompiler {
             if (token.matches("[a-zA-Z][\\w\\d]*")) {
 
                 if (token.equals("if")) {
-                    returningToken = "IF";
+                    returningToken = "if";
                 } else if (token.equals("else")) {
-                    returningToken = "ELSE";
+                    returningToken = "else";
                 } else if (token.equals("while")) {
-                    returningToken = "WHILE";
+                    returningToken = "while";
                 } else if (token.equals("void")) {
-                    returningToken = "VOID";
+                    returningToken = "void";
                 } else if (token.equals("int")) {
-                    returningToken = "INT";
+                    returningToken = "int";
                 } else if (token.equals("return")) {
-                    returningToken = "RETURN";
+                    returningToken = "return";
                 } else if (token.equals("EOF")) {
                     returningToken = "EOF";
                 } else {
@@ -243,7 +243,7 @@ public class ScannerCompiler {
 
             } else if (token.matches("[+-]?\\d+")) {
                 returningToken = "NUM";
-                return new Token(returningToken, Integer.parseInt(token));
+                return new Token(returningToken, Integer.parseInt(token), "NUM");
             } else {
                 // TODO: 04/07/17 ERROR!!
             }
@@ -260,11 +260,11 @@ public class ScannerCompiler {
 
 
         lastToken = returningToken;
-        return new Token(returningToken, attr);
+        return new Token(returningToken, attr, returningToken);
 //        return returningToken;
     }
 
-    private String getVar() throws IOException {
+    private String getVar()  {
 
         String token = "";
         char inputChar;
@@ -290,7 +290,7 @@ public class ScannerCompiler {
     }
 
 
-    private String getNum() throws IOException {
+    private String getNum()  {
 
         String token = "";
         char inputChar;

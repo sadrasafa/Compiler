@@ -8,16 +8,34 @@ public class Production {
     private Symbol LHS;
     private Symbol[] RHS;
     int number;
+    static int No = 0;
 
     public Production(Symbol LHS, Symbol[] RHS, int number) {
         this.LHS = LHS;
         this.RHS = RHS;
         this.number = number;
     }
+    public Production(Symbol LHS, Symbol[] RHS) {
+        this.LHS = LHS;
+        this.RHS = RHS;
+        this.number = No++;
+    }
     public Production(Symbol LHS, int number) {
         this.LHS = LHS;
         RHS = new Symbol[0];
         this.number = number;
+    }
+    public Production(Symbol LHS) {
+        this.LHS = LHS;
+        RHS = new Symbol[0];
+        this.number = No++;
+    }
+    public void printProduction() {
+        System.out.print(getNumber()+": " +getLHS().getName()+" -> ");
+        for (int i = 0; i < getRHS().length; i++) {
+            System.out.print(getRHS()[i].getName()+" ");
+        }
+        System.out.println();
     }
 
     public Symbol getLHS() {
