@@ -397,7 +397,7 @@ public class Grammar {
         Production p14_3 = new Production(symStatement, new Symbol[]{symSelectionStmt});
         Production p14_4 = new Production(symStatement, new Symbol[]{symIterationStmt});
         Production p14_5 = new Production(symStatement, new Symbol[]{symReturnStmt});
-        Production p15_1 = new Production(symExpressionStmt, new Symbol[]{symVar, asPid, symAssign, symExpression, asAssign, symSemicolon});
+        Production p15_1 = new Production(symExpressionStmt, new Symbol[]{symVar, symAssign, symExpression, asAssign, symSemicolon});
         Production p15_2 = new Production(symExpressionStmt, new Symbol[]{symSemicolon});
         Production p16_1 = new Production(symSelectionStmt, new Symbol[]{symIf, symOpenPar, symGenExpression, symClosePar, asSave,  symStatement, asJpf});
         Production p16_2 = new Production(symSelectionStmt, new Symbol[]{symIf, symOpenPar, symGenExpression, symClosePar, asSave, symStatement, symElse, asJpf_save, symStatement, asJp});
@@ -561,7 +561,7 @@ public class Grammar {
         asWhile.setFollow(symIterationStmt.getFollow());
         asReturn.setFollow(new ArrayList<>(Arrays.asList(symSemicolon)));
         asPid.setFollow(symVar.getFollow());
-        asPid.addFollow(new ArrayList<>(Arrays.asList(symAssign, symOpenBrace)));
+        asPid.addFollow(new ArrayList<>(Arrays.asList(symOpenBrace)));
         asAid.setFollow(new ArrayList<>(Arrays.asList(symCloseBrace)));
         asAnd.setFollow(symRelExpression.getFollow());
         asEquals.setFollow(symRelTerm.getFollow());
