@@ -465,10 +465,13 @@ public class Grammar {
         productions.addAll(new ArrayList<>(Arrays.asList(p11, p12_1, p12_2, p13_1, p13_2, p14_1, p14_2, p14_3, p14_4, p14_5, p15_1, p15_2, p16_1, p16_2)));
         productions.addAll(new ArrayList<>(Arrays.asList(p17, p18_1, p18_2, p19_1, p19_2, p20_1, p20_2, p21_1, p21_2, p22_1, p22_2, p23_1, p23_2, p24_1, p24_2)));
         productions.addAll(new ArrayList<>(Arrays.asList(p25_1, p25_2, p26_1, p26_2, p27_1, p27_2, p27_3, p27_4, p28, p29_1, p29_2, p30_1, p30_2)));
+//        productions.addAll(new ArrayList<>(Arrays.asList(p25_1, p25_2, p26_1, p26_2, p27_1, p27_2, p27_3, p28, p29_1, p29_2, p30_1, p30_2)));
+
+
 
         productions.addAll(new ArrayList<>(Arrays.asList(pPushID, pDefVar, pPushNum, pDefArr, pDefFunc, pAssignPars)));
-        productions.addAll(new ArrayList<>(Arrays.asList(pDefVarForFunc, pDefArrForFunc, pAssign, pSave, pJpf, pJpf_save, pJp)));
-        productions.addAll(new ArrayList<>(Arrays.asList(pLabel, pWhile, pReturn, pPid, pAid, pAnd, pEquals, pLessthan, pAddOrSub, pPushAdd, pPushSub)));
+        productions.addAll(new ArrayList<>(Arrays.asList(pDefVarForFunc, pDefArrForFunc, pPid, pAssign, pSave, pJpf, pJp, pJpf_save)));
+        productions.addAll(new ArrayList<>(Arrays.asList(pLabel, pWhile, pReturn, pAid, pAnd, pEquals, pLessthan, pAddOrSub, pPushAdd, pPushSub)));
         productions.addAll(new ArrayList<>(Arrays.asList(pMultOrDiv, pPushMult, pPushDiv, pPushAddrForJump, pCall)));
 
 
@@ -575,6 +578,7 @@ public class Grammar {
         printFirst();
         printFollow();
 //        printPoxFollow();
+        printAllProductions();
 
     }
 
@@ -915,12 +919,12 @@ public class Grammar {
 
         }
 //        LRcollections.get(0).printItemSet();
-//        for (ItemSet is : LRcollections) {
-//            is.showThisItemSet();
-//        }
-//        for (ItemSet is: LRcollections) {
-//            is.poxiGorsat();
-//        }
+        for (ItemSet is : LRcollections) {
+            is.showThisItemSet();
+        }
+        for (ItemSet is: LRcollections) {
+            is.poxiGorsat();
+        }
         return LRcollections;
     }
 
@@ -1182,14 +1186,14 @@ public class Grammar {
 
     private void checkConflict(ArrayList<HashMap<Symbol, ParseAction>> parseTable, HashMap<Symbol, ParseAction> row,
                                Symbol s, ParseAction action ) {
-//        if (row.get(s)!=null) {
-//            if (!row.get(s).getActionText().equals(action.getActionText())) {
-//                System.out.println("**********CONFLIIIICT in row " + parseTable.size()+"because of "+s.getName());
-//                System.out.println("already had " + row.get(s).getActionText());
-//                System.out.println("want to add " + action.getActionText());
-//            }
-//
-//        }
+        if (row.get(s)!=null) {
+            if (!row.get(s).getActionText().equals(action.getActionText())) {
+                System.out.println("**********CONFLIIIICT in row " + parseTable.size()+"because of "+s.getName());
+                System.out.println("already had " + row.get(s).getActionText());
+                System.out.println("want to add " + action.getActionText());
+            }
+
+        }
     }
 
 

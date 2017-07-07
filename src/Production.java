@@ -31,8 +31,8 @@ public class Production {
         this.number = No++;
     }
     public void printProduction() {
-//        System.out.print(getNumber()+": " +getLHS().getName()+" -> ");
-        System.out.print(getLHS().getName()+" -> ");
+        System.out.print(getNumber()+": " +getLHS().getName()+" -> ");
+//        System.out.print(getLHS().getName()+" -> ");
         for (int i = 0; i < getRHS().length; i++) {
             System.out.print(getRHS()[i].getName()+" ");
         }

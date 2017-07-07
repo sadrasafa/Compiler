@@ -63,7 +63,7 @@ public class Parser {
                 System.out.print("REDUCE : ");
                 production.printProduction();
                 if (A.isActionSymbol()) {
-                    codeGenerator.generateCode(A.getName(), tkn);
+//                    codeGenerator.generateCode(A.getName(), tkn);
                 }
             }
             else if (action.getType() == ParseAction.ACC) {
