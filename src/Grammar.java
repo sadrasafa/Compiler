@@ -435,8 +435,8 @@ public class Grammar {
         Production p29_2 = new Production(symArgs);
         Production p30_1 = new Production(symArgsList, new Symbol[]{symArgsList, symComma, symExpression});
         Production p30_2 = new Production(symArgsList, new Symbol[]{symExpression});
-        Production p31_1 = new Production(symCall, new Symbol[]{symOutputTerminal, symOpenPar, symID, asPid, symClosePar, asOutput});
-        Production p31_2 = new Production(symCall, new Symbol[]{symOutputTerminal, symOpenPar, symNum, asPushNum, symClosePar, asOutput});
+        Production p31_1 = new Production(symStatement, new Symbol[]{symOutputTerminal, symOpenPar, symID, asPid, symClosePar, asOutput});
+        Production p31_2 = new Production(symStatement, new Symbol[]{symOutputTerminal, symOpenPar, symNum, asPushNum, symClosePar, asOutput});
 
 
 
@@ -593,11 +593,11 @@ public class Grammar {
         asReturnToMain.setFollow(symFunDeclaration.getFollow());
         asPushInt.setFollow(symFunRetType.getFollow());
         asPushVoid.setFollow(symFunRetType.getFollow());
-        asOutput.setFollow(symCall.getFollow());
+        asOutput.setFollow(symStatement.getFollow());
         asIncScope.setFollow(new ArrayList<>(Arrays.asList(symInt, symVoid, symWhile, symReturn, symID, symOpenAk, symSemicolon, symIf, symCloseAk)));
         asDecScope.setFollow(symCompoundStmt.getFollow());
-        printFirst();
-        printFollow();
+//        printFirst();
+//        printFollow();
 //        printPoxFollow();
 //        printAllProductions();
 
@@ -940,9 +940,9 @@ public class Grammar {
 
         }
 //        LRcollections.get(0).printItemSet();
-        for (ItemSet is : LRcollections) {
-            is.showThisItemSet();
-        }
+//        for (ItemSet is : LRcollections) {
+//            is.showThisItemSet();
+//        }
 //        for (ItemSet is: LRcollections) {
 //            is.poxiGorsat();
 //        }
@@ -1188,18 +1188,18 @@ public class Grammar {
             parseTable.add(row);
         }
 
-        int n = 0;
-        for (HashMap<Symbol, ParseAction> row: parseTable) {
-            System.out.println(n++);
-            for (Map.Entry<Symbol, ParseAction> pair: row.entrySet()) {
-                System.out.print(pair.getKey().getName()+" ");
-                pair.getValue().printAction();
-                System.out.print(" , ");
-            }
-            System.out.println();
-            System.out.println("_______________");
-
-        }
+//        int n = 0;
+//        for (HashMap<Symbol, ParseAction> row: parseTable) {
+//            System.out.println(n++);
+//            for (Map.Entry<Symbol, ParseAction> pair: row.entrySet()) {
+//                System.out.print(pair.getKey().getName()+" ");
+//                pair.getValue().printAction();
+//                System.out.print(" , ");
+//            }
+//            System.out.println();
+//            System.out.println("_______________");
+//
+//        }
 
 
         return parseTable;
