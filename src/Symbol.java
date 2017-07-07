@@ -92,7 +92,7 @@ public class Symbol {
     }
 
     public void setFollow(ArrayList<Symbol> follow) {
-        this.follow = follow;
+        this.follow.addAll(follow);
     }
 
     public void setFirst(ArrayList<Symbol> first) {

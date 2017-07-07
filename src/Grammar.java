@@ -242,6 +242,7 @@ public class Grammar {
         symIterationStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf))); //P
         symReturnStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID,  symOpenAk, symCloseAk, symSemicolon, symIf))); //Q
         symVar.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symAssign, symSemicolon))); //R
+
         symExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symSemicolon))); //S
         symGenExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symSemicolon))); //T
         symRelExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symSemicolon))); //U
@@ -328,8 +329,8 @@ public class Grammar {
         Symbol asDefFunc = new Symbol("#defFunc");
         Symbol asAssignPars = new Symbol("#assignPars");
         Symbol asReturnToMain = new Symbol("#returnToMain");
-        Symbol asPushInt = new Symbol("pushInt");
-        Symbol asPushVoid = new Symbol("pushVoid");
+        Symbol asPushInt = new Symbol("#pushInt");
+        Symbol asPushVoid = new Symbol("#pushVoid");
         Symbol asDefVarForFunc = new Symbol("#defVarForFunc");
         Symbol asDefArrForFunc = new Symbol("#defArrForFunc");
         Symbol asPid = new Symbol("#pid");
@@ -535,6 +536,8 @@ public class Grammar {
         symIterationStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf))); //P
         symReturnStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID,  symOpenAk, symCloseAk, symSemicolon, symIf))); //Q
         symVar.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symAssign, symSemicolon))); //R
+        System.out.println("HOY: "+symVar.getFollow().get(symVar.getFollow().size()-1).getName());
+
         symExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symSemicolon))); //S
         symGenExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symSemicolon))); //T
         symRelExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symSemicolon))); //U
@@ -1196,7 +1199,8 @@ public class Grammar {
         if (row.get(s)!=null) {
             if (!row.get(s).getActionText().equals(action.getActionText())) {
                 System.out.println("**********CONFLIIIICT in row " + parseTable.size()+"because of "+s.getName());
-                System.out.println("already had " + row.get(s).getActionText());
+                System.out.println("already had " + row.get(s).getActionText() );
+                productions.get(row.get(s).getDest()).printProduction();
                 System.out.println("want to add " + action.getActionText());
             }
 
