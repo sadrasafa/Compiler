@@ -19,16 +19,23 @@ public class CodeGenerator {
         st = ScannerCompiler.symbolTable;
         functionStack = new Stack<>();
         returnAddr = new Stack<>();
+        pb = new ArrayList<>();
         temp = 500;
         address = 100;
     }
 
     public void generateCode(String action, Token lastToken) {
 
+        System.out.println("***************************************************************************************");
+        System.out.println("action = " + action);
+        System.out.println("lastToken = " + lastToken.print());
+
+
         int top = ss.size() - 1;
         int t, t1, t2, t3;
         int num;
         int jumpAddr = -1;
+        action = action.substring(1);
         SymbolTableEntry ste, ste2, ste3;
         switch (action) {
             case "pid":
@@ -41,6 +48,16 @@ public class CodeGenerator {
 
                 break;
             case "aid":
+                String stringNumber;
+                int arrIndex;
+                if(ss.get(top).contains("#")){
+                    stringNumber = ss.get(top).substring(1);
+                    arrIndex = Integer.parseInt(stringNumber);
+
+//                    if(arrIndex > )
+
+
+                }
 
                 p = Integer.parseInt(ss.get(top - 1)) + (Integer.parseInt(ss.get(top))* 4); //base + displacement
 
@@ -141,8 +158,11 @@ public class CodeGenerator {
                 break;
             case "defArrForFunc":
                 // TODO: 07/07/17 FILL THIS SHIT UP!
+                break;
+            case "defArr":
                 ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top - 1)));
-                num = Integer.parseInt(ss.get(top));
+                num = Integer.parseInt(ss.get(top).substring(1));
+                ste.setLimit(num - 1);
                 ste.setAddress(getAddress());
                 for (int i = 0; i < num - 1; i++) {
                     getAddress();
@@ -158,6 +178,7 @@ public class CodeGenerator {
 
                 break;
             case "pushID":
+                System.out.println("HELLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLOOO");
                 ss.push("" + lastToken.getAttr());
                 break;
             case "pushNUM":
@@ -214,13 +235,15 @@ public class CodeGenerator {
 
                 ste.setFunctionAddressPB(pb.size());
 
-                for (int i = 0; i < ste.getParamCount(); i++) {
-
-                    pb.add(new Code(giveCode("ASSIGN", ss.pop(), "" + ste.getParameterAddresses().get(i))));
-
+                System.out.println("SS: ");
+                for (int i = 0; i < ss.size(); i++) {
+                    System.out.println("ss.get(" +  i + ") = " + ss.get(i));
                 }
-
                 ss.pop();
+                System.out.println("SORRY");
+
+
+//                ss.pop();
                 break;
             case "pushAddrForJump":
 
@@ -230,6 +253,15 @@ public class CodeGenerator {
                 jumpAddr = ste.getFunctionAddressPB();
 
                 ste.setReturnAddr(getAddress());
+
+                for (int i = 0; i < ste.getParamCount(); i++) {
+
+                    ss.peek();
+                    ste.getParameterAddresses();
+                    pb.add(new Code(giveCode("ASSIGN", ss.pop(), "" + ste.getParameterAddresses().get(i))));
+
+                }
+
 
 
                 pb.add(new Code(giveCode("ASSIGN", "" + (temp2 + 2), "" + ste.getReturnAddr())));
@@ -253,6 +285,15 @@ public class CodeGenerator {
                 break;
                 // TODO: 06/07/17 More actions
         }
+
+
+        ScannerCompiler.symbolTable.print();
+
+        System.out.println("SS: ");
+        for (int i = 0; i < ss.size(); i++) {
+            System.out.println("ss.get(" +  i + ") = " + ss.get(i));
+        }
+
 
     }
 

@@ -13,7 +13,17 @@ public class SymbolTableEntry {
     private boolean function;
     private int functionAddressPB;
     private int returnAddr;
+    private int limit = -1;
     private ArrayList<Integer> parameterAddresses = null;
+
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
 
     public int getReturnAddr() {
         return returnAddr;
@@ -102,6 +112,6 @@ public class SymbolTableEntry {
     }
 
     public String print(){
-        return "" + name + " " + type + " ";
+        return "" + name + " " + type + " " + address + " " ;
     }
 }
