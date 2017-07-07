@@ -54,7 +54,7 @@ public class Grammar {
         }
     }
 
-
+    /*
     private void createGrammar1() {
 
         Symbol symProgram= new Symbol("Program", false);
@@ -261,7 +261,7 @@ public class Grammar {
 
 //        printPoxFollow();
 
-    }
+    }*/
 
 
     private void createGrammar2() {
@@ -544,17 +544,17 @@ public class Grammar {
         symSelectionStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf))); //O
         symIterationStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf))); //P
         symReturnStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID,  symOpenAk, symCloseAk, symSemicolon, symIf))); //Q
-        symVar.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symAssign, symSemicolon))); //R
+        symVar.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symAssign, symSemicolon, symComma))); //R
 
-        symExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symSemicolon))); //S
+        symExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symSemicolon, symComma))); //S
         symGenExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symSemicolon))); //T
         symRelExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symSemicolon))); //U
         symRelTerm.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symSemicolon))); //V
         symAddOp.setFollow(new ArrayList<>(Arrays.asList(symOpenPar, symID, symNum))); // W
-        symTerm.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symSemicolon))); //X
+        symTerm.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symSemicolon, symComma))); //X
         symMulOp.setFollow(new ArrayList<>(Arrays.asList(symOpenPar, symID, symNum))); //Y
-        symFactor.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symSemicolon))); //Z
-        symCall.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symSemicolon))); //@
+        symFactor.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symSemicolon, symComma))); //Z
+        symCall.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symSemicolon, symComma))); //@
         symArgs.setFollow(new ArrayList<>(Arrays.asList(symClosePar))); //#
         symArgsList.setFollow(new ArrayList<>(Arrays.asList(symComma, symClosePar))); //$
 
@@ -596,8 +596,8 @@ public class Grammar {
         asOutput.setFollow(symCall.getFollow());
         asIncScope.setFollow(new ArrayList<>(Arrays.asList(symInt, symVoid, symWhile, symReturn, symID, symOpenAk, symSemicolon, symIf, symCloseAk)));
         asDecScope.setFollow(symCompoundStmt.getFollow());
-//        printFirst();
-//        printFollow();
+        printFirst();
+        printFollow();
 //        printPoxFollow();
 //        printAllProductions();
 
