@@ -1,6 +1,7 @@
 import com.sun.org.apache.bcel.internal.generic.GOTO;
 import jdk.nashorn.internal.runtime.arrays.ArrayLikeIterator;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -8,16 +9,18 @@ import java.util.*;
  */
 public class Parser {
 
+
+
     private Grammar grammar;
     private ScannerCompiler scanner;
     private ArrayList<HashMap<Symbol, ParseAction>> parseTable;
     private Stack<Integer> stack;
-    public Parser(ScannerCompiler scanner) {
+    private CodeGenerator codeGenerator;
+    public Parser(String filePath) throws IOException{
         grammar = new Grammar();
-        System.out.println("GRAMMAR CREATED");
         parseTable = grammar.createParseTable();
-        System.out.println("PARSE TABLE CREATED");
-        this.scanner = scanner;
+        scanner = new ScannerCompiler(filePath);
+        codeGenerator = new CodeGenerator();
         stack = new Stack<>();
         parse();
 
@@ -26,7 +29,8 @@ public class Parser {
     private void parse() {
         stack.push(0);
         Integer top;
-        Symbol token = scanner.getToken().getSymbol(); //token = a
+        Token tkn = scanner.getToken();
+        Symbol token = tkn.getSymbol(); //token = a
         ParseAction action;
         System.out.println("PARSING STARTED");
         while (true) {
@@ -37,7 +41,8 @@ public class Parser {
             if (action.getType() == ParseAction.SHIFT) {
                 Integer t = action.getDest();
                 stack.push(t);
-                token = scanner.getToken().getSymbol();
+                tkn = scanner.getToken();
+                token = tkn.getSymbol();
                 System.out.println("PUSHED "+t);
             }
             else if (action.getType() == ParseAction.REDUCE) {
@@ -50,10 +55,16 @@ public class Parser {
                 top = stack.peek();
                 Symbol A = production.getLHS();
                 ParseAction goTo = parseTable.get(top).get(A);
+                if (goTo==null) {
+                    System.out.println(A.getName()+" **************");
+                }
                 Integer t =  goTo.getDest(); //todo aya goTo si olmasa neyniyak? ya hammasha olar?
                 stack.push(t);
                 System.out.print("REDUCE : ");
                 production.printProduction();
+                if (A.isActionSymbol()) {
+                    codeGenerator.generateCode(A.getName(), tkn);
+                }
             }
             else if (action.getType() == ParseAction.ACC) {
                 System.out.println("_________________");
