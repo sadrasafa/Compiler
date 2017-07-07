@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Stack;
+
 /**
  * Created by aarash on 05/07/17.
  */
@@ -7,6 +10,39 @@ public class SymbolTableEntry {
     private int scope;
     private String type;
     private int address;
+    private boolean function;
+    private int functionAddressPB;
+    private int returnAddr;
+    private ArrayList<Integer> parameterAddresses = null;
+
+    public int getReturnAddr() {
+        return returnAddr;
+    }
+
+    public void setReturnAddr(int returnAddr) {
+        this.returnAddr = returnAddr;
+    }
+
+    public int getFunctionAddressPB() {
+        return functionAddressPB;
+    }
+
+    public void setFunctionAddressPB(int functionAddressPB) {
+        this.functionAddressPB = functionAddressPB;
+    }
+
+    public void addParam(int address){
+        parameterAddresses.add(address);
+    }
+
+    public ArrayList<Integer> getParameterAddresses(){
+        return parameterAddresses;
+    }
+
+    public int getParamCount(){
+        return parameterAddresses.size();
+    }
+
 
     public int getAddress() {
         return address;
@@ -19,6 +55,18 @@ public class SymbolTableEntry {
     public SymbolTableEntry(String name, String type){
         this.name = name;
         this.type = type;
+        this.function = false;
+    }
+
+    public boolean isFunction() {
+        return function;
+    }
+
+    public void setFunction(boolean function) {
+        if(function){
+            parameterAddresses = new ArrayList<>();
+        }
+        this.function = function;
     }
 
     public String getType() {

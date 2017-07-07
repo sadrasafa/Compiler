@@ -10,11 +10,15 @@ public class CodeGenerator {
     private Stack<String> ss;
     private ArrayList<Code> pb;
     private SymbolTable st;
+    private Stack<String> functionStack;
+    private Stack<Integer> returnAddr;
     private int temp, address;
 
     public CodeGenerator() {
         ss = new Stack<>();
         st = ScannerCompiler.symbolTable;
+        functionStack = new Stack<>();
+        returnAddr = new Stack<>();
         temp = 500;
         address = 100;
     }
@@ -24,7 +28,8 @@ public class CodeGenerator {
         int top = ss.size() - 1;
         int t, t1, t2, t3;
         int num;
-        SymbolTableEntry ste;
+        int jumpAddr = -1;
+        SymbolTableEntry ste, ste2, ste3;
         switch (action) {
             case "pid":
                 int p;
@@ -125,7 +130,17 @@ public class CodeGenerator {
                 ste.setAddress(getAddress());
                 ss.pop();
                 break;
-            case "defArr":
+            case "defVarForFunc":
+                ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top)));
+//                ste = st.findWithID(input);
+                ste.setAddress(getAddress());
+
+                ste2 = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top - 1))); //function's entry
+                ste2.addParam(ste.getAddress());
+                ss.pop();
+                break;
+            case "defArrForFunc":
+                // TODO: 07/07/17 FILL THIS SHIT UP!
                 ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top - 1)));
                 num = Integer.parseInt(ss.get(top));
                 ste.setAddress(getAddress());
@@ -134,6 +149,13 @@ public class CodeGenerator {
                 }
                 ss.pop();
                 ss.pop();
+                break;
+            case "defFunc":
+
+                ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top)));
+                ste.setFunction(true);
+
+
                 break;
             case "pushID":
                 ss.push("" + lastToken.getAttr());
@@ -181,7 +203,54 @@ public class CodeGenerator {
                 ss.pop();
                 ss.push("" + t3);
 
+                break;
 
+            case "pop":
+                ss.pop();
+                break;
+            case "assignPars":
+
+                ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top)));
+
+                ste.setFunctionAddressPB(pb.size());
+
+                for (int i = 0; i < ste.getParamCount(); i++) {
+
+                    pb.add(new Code(giveCode("ASSIGN", ss.pop(), "" + ste.getParameterAddresses().get(i))));
+
+                }
+
+                ss.pop();
+                break;
+            case "pushAddrForJump":
+
+                int temp2 = pb.size();
+                ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top)));
+
+                jumpAddr = ste.getFunctionAddressPB();
+
+                ste.setReturnAddr(getAddress());
+
+
+                pb.add(new Code(giveCode("ASSIGN", "" + (temp2 + 2), "" + ste.getReturnAddr())));
+
+
+                break;
+            case "call":
+
+                pb.add(new Code(giveCode("JP", "" + jumpAddr)));
+
+
+
+//                returnAddr.push(pb.size());
+
+
+
+
+                break;
+            case "return":
+                // TODO: 07/07/17
+                break;
                 // TODO: 06/07/17 More actions
         }
 

@@ -16,6 +16,7 @@ public class ScannerCompiler {
     Charset charset = Charset.defaultCharset();
     Reader buffer, reader;
     boolean EOFGordum = false;
+//    int scope;
     static SymbolTable symbolTable;
 
     ArrayList<Character> separators = new ArrayList<>();
@@ -33,7 +34,7 @@ public class ScannerCompiler {
         inputStream = new FileInputStream(file);
         reader = new InputStreamReader(inputStream, charset);
         buffer = new BufferedReader(reader);
-
+//        scope = 0;
         symbolTable = new SymbolTable();
 
         lookahead = 0;
@@ -146,10 +147,12 @@ public class ScannerCompiler {
 //                    returningToken = "RIGHTBRACKET";
 //                    break;
                 case '{':
+//                    scope++;
                     return new Token("LEFTAK", 0, "{");
 //                    returningToken = "LEFTAK";
 //                    break;
                 case '}':
+//                    scope--; // TODO: 07/07/17
                     return new Token("RIGHTAK", 0, "}");
 //                    returningToken = "RIGHTAK";
 //                    break;
