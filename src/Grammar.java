@@ -575,7 +575,7 @@ public class Grammar {
         asPushDiv.setFollow(symMulOp.getFollow());
         asPushAddrForJump.setFollow(new ArrayList<>(Arrays.asList(symOpenPar)));
         asCall.setFollow(symCall.getFollow());
-
+        asReturnToMain.setFollow(symFunDeclaration.getFollow());
 
 //        printFirst();
 //        printFollow();
