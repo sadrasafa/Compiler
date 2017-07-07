@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 /**
  * Created by aarash on 05/07/17.
@@ -40,6 +41,13 @@ public class SymbolTable {
 
 
     }
+    public void remove(int from) {
+        int times = symbolTable.size() - from;
+        for (int i = 0; i < times; i++) {
+            symbolTable.remove(from);
+        }
+    }
+
 
     public SymbolTableEntry findWithID(String name) {
         SymbolTableEntry toRet = null;
@@ -72,5 +80,8 @@ public class SymbolTable {
             SymbolTableEntry ste = symbolTable.get(i);
             System.out.println(i + ". ste = " + ste.print());
         }
+    }
+    public int getSize() {
+        return symbolTable.size();
     }
 }

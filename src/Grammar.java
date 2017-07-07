@@ -320,6 +320,7 @@ public class Grammar {
         Symbol symCall = new Symbol("Call", false);
         Symbol symArgs = new Symbol("args", false);
         Symbol symArgsList = new Symbol("ArgList", false);
+        Symbol symOutputTerminal = new Symbol("output", true);
 
         //ActionSymbollar
         Symbol asPushID = new Symbol("#pushID");
@@ -354,7 +355,7 @@ public class Grammar {
         Symbol asPushDiv = new Symbol("#pushDiv");
         Symbol asPushAddrForJump = new Symbol("#pushAddrForJump");
         Symbol asCall = new Symbol("#call");
-
+        Symbol asOutput = new Symbol("#output");
 
 
 
@@ -364,11 +365,11 @@ public class Grammar {
         symbols.addAll(new ArrayList<>(Arrays.asList(symLocalDeclarations, symStatementList, symStatement, symExpressionStmt, symSelectionStmt, symIterationStmt, symReturnStmt)));
         symbols.addAll(new ArrayList<>(Arrays.asList(symVar, symAssign, symExpression, symSemicolon, symIf, symOpenPar, symGenExpression, symClosePar)));
         symbols.addAll(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symRelExpression, symAnd, symRelTerm, symEquals, symLess, symAddOp)));
-        symbols.addAll(new ArrayList<>(Arrays.asList(symTerm, symPlus, symMinus, symMulOp, symTimes, symDivision, symFactor, symCall, symArgs, symArgsList)));
+        symbols.addAll(new ArrayList<>(Arrays.asList(symTerm, symPlus, symMinus, symMulOp, symTimes, symDivision, symFactor, symCall, symArgs, symArgsList, symOutputTerminal)));
 
         symbols.addAll(new ArrayList<>(Arrays.asList(asPushID, asDefVar, asPushNum, asDefArr, asDefFunc, asAssignPars, asReturnToMain, asPushInt, asPushVoid, asDefVarForFunc, asDefArrForFunc)));
         symbols.addAll(new ArrayList<>(Arrays.asList(asPid,  asAssign, asJpf, asSave, asJpf_save, asJp, asLabel, asWhile, asReturn, asAid, asAnd)));
-        symbols.addAll(new ArrayList<>(Arrays.asList(asEquals, asLessThan, asAddOrSub, asPushAdd, asPushSub, asMultOrDiv, asPushMult, asPushDiv, asPushAddrForJump, asCall)));
+        symbols.addAll(new ArrayList<>(Arrays.asList(asEquals, asLessThan, asAddOrSub, asPushAdd, asPushSub, asMultOrDiv, asPushMult, asPushDiv, asPushAddrForJump, asCall, asOutput)));
 
         //        System.out.println("Symbols size: "+symbols.size());
 
@@ -433,6 +434,10 @@ public class Grammar {
         Production p29_2 = new Production(symArgs);
         Production p30_1 = new Production(symArgsList, new Symbol[]{symArgsList, symComma, symExpression});
         Production p30_2 = new Production(symArgsList, new Symbol[]{symExpression});
+        Production p31_1 = new Production(symCall, new Symbol[]{symOutputTerminal, symOpenPar, symID, asPid, symClosePar, asOutput});
+        Production p31_2 = new Production(symCall, new Symbol[]{symOutputTerminal, symOpenPar, symNum, asPushNum, symClosePar, asOutput});
+
+
 
         Production pPushID = new Production(asPushID);
         Production pDefVar = new Production(asDefVar);
@@ -466,11 +471,13 @@ public class Grammar {
         Production pReturnToMain = new Production(asReturnToMain);
         Production pPushInt = new Production(asPushInt);
         Production pPushVoid = new Production(asPushVoid);
+        Production pOutput = new Production(asOutput);
+
 
         productions = new ArrayList<>(Arrays.asList(p0, p1, p2_1, p2_2, p3_1, p3_2, p4_1, p4_2, p6, p7_1, p7_2, p8_1, p8_2, p9_1, p9_2, p10_1, p10_2));
         productions.addAll(new ArrayList<>(Arrays.asList(p11, p12_1, p12_2, p13_1, p13_2, p14_1, p14_2, p14_3, p14_4, p14_5, p15_1, p15_2, p16_1, p16_2)));
         productions.addAll(new ArrayList<>(Arrays.asList(p17, p18_1, p18_2, p19_1, p19_2, p20_1, p20_2, p21_1, p21_2, p22_1, p22_2, p23_1, p23_2, p24_1, p24_2)));
-        productions.addAll(new ArrayList<>(Arrays.asList(p25_1, p25_2, p26_1, p26_2, p27_1, p27_2, p27_3, p27_4, p28, p29_1, p29_2, p30_1, p30_2)));
+        productions.addAll(new ArrayList<>(Arrays.asList(p25_1, p25_2, p26_1, p26_2, p27_1, p27_2, p27_3, p27_4, p28, p29_1, p29_2, p30_1, p30_2, p31_1, p31_2)));
 //        productions.addAll(new ArrayList<>(Arrays.asList(p25_1, p25_2, p26_1, p26_2, p27_1, p27_2, p27_3, p28, p29_1, p29_2, p30_1, p30_2)));
 
 
@@ -479,7 +486,7 @@ public class Grammar {
         productions.addAll(new ArrayList<>(Arrays.asList(pPushID, pDefVar, pPushNum, pDefArr, pDefFunc, pAssignPars)));
         productions.addAll(new ArrayList<>(Arrays.asList(pDefVarForFunc, pDefArrForFunc, pPid, pAssign, pSave, pJpf, pJp, pJpf_save)));
         productions.addAll(new ArrayList<>(Arrays.asList(pLabel, pWhile, pReturn, pAid, pAnd, pEquals, pLessthan, pAddOrSub, pPushAdd, pPushSub)));
-        productions.addAll(new ArrayList<>(Arrays.asList(pMultOrDiv, pPushMult, pPushDiv, pPushAddrForJump, pCall, pReturnToMain, pPushInt, pPushVoid)));
+        productions.addAll(new ArrayList<>(Arrays.asList(pMultOrDiv, pPushMult, pPushDiv, pPushAddrForJump, pCall, pReturnToMain, pPushInt, pPushVoid, pOutput)));
 
 
 //        printAllProductions();
@@ -536,7 +543,6 @@ public class Grammar {
         symIterationStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf))); //P
         symReturnStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID,  symOpenAk, symCloseAk, symSemicolon, symIf))); //Q
         symVar.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symAssign, symSemicolon))); //R
-        System.out.println("HOY: "+symVar.getFollow().get(symVar.getFollow().size()-1).getName());
 
         symExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symSemicolon))); //S
         symGenExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symSemicolon))); //T
@@ -585,6 +591,7 @@ public class Grammar {
         asReturnToMain.setFollow(symFunDeclaration.getFollow());
         asPushInt.setFollow(symFunRetType.getFollow());
         asPushVoid.setFollow(symFunRetType.getFollow());
+        asOutput.setFollow(symCall.getFollow());
 //        printFirst();
 //        printFollow();
 //        printPoxFollow();
@@ -1196,15 +1203,15 @@ public class Grammar {
 
     private void checkConflict(ArrayList<HashMap<Symbol, ParseAction>> parseTable, HashMap<Symbol, ParseAction> row,
                                Symbol s, ParseAction action ) {
-        if (row.get(s)!=null) {
-            if (!row.get(s).getActionText().equals(action.getActionText())) {
-                System.out.println("**********CONFLIIIICT in row " + parseTable.size()+"because of "+s.getName());
-                System.out.println("already had " + row.get(s).getActionText() );
-                productions.get(row.get(s).getDest()).printProduction();
-                System.out.println("want to add " + action.getActionText());
-            }
-
-        }
+//        if (row.get(s)!=null) {
+//            if (!row.get(s).getActionText().equals(action.getActionText())) {
+//                System.out.println("**********CONFLIIIICT in row " + parseTable.size()+"because of "+s.getName());
+//                System.out.println("already had " + row.get(s).getActionText() );
+//                productions.get(row.get(s).getDest()).printProduction();
+//                System.out.println("want to add " + action.getActionText());
+//            }
+//
+//        }
     }
 
 

@@ -136,7 +136,7 @@ public class Parser {
         ScannerCompiler.symbolTable.print();
 
         for (int i = 0; i < codeGenerator.getPb().size(); i++) {
-            System.out.println("" + i  + " : " + codeGenerator.getPb().get(i));
+            System.out.println("" + i  + " : " + codeGenerator.getPb().get(i).getCode());
         }
 
 
