@@ -30,6 +30,8 @@ public class Production {
         RHS = new Symbol[0];
         this.number = No++;
     }
+
+    
     public void printProduction() {
         System.out.print(getNumber()+": " +getLHS().getName()+" -> ");
 //        System.out.print(getLHS().getName()+" -> ");

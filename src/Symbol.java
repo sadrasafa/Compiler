@@ -63,6 +63,8 @@ public class Symbol {
         return actionSymbol;
     }
 
+
+
     public String getPox() {
         String s = "";
 
