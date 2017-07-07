@@ -576,10 +576,10 @@ public class Grammar {
         asCall.setFollow(symCall.getFollow());
 
 
-        printFirst();
-        printFollow();
+//        printFirst();
+//        printFollow();
 //        printPoxFollow();
-        printAllProductions();
+//        printAllProductions();
 
     }
 
@@ -920,12 +920,12 @@ public class Grammar {
 
         }
 //        LRcollections.get(0).printItemSet();
-        for (ItemSet is : LRcollections) {
-            is.showThisItemSet();
-        }
-        for (ItemSet is: LRcollections) {
-            is.poxiGorsat();
-        }
+//        for (ItemSet is : LRcollections) {
+//            is.showThisItemSet();
+//        }
+//        for (ItemSet is: LRcollections) {
+//            is.poxiGorsat();
+//        }
         return LRcollections;
     }
 
@@ -1168,18 +1168,18 @@ public class Grammar {
             parseTable.add(row);
         }
 
-        int n = 0;
-        for (HashMap<Symbol, ParseAction> row: parseTable) {
-            System.out.println(n++);
-            for (Map.Entry<Symbol, ParseAction> pair: row.entrySet()) {
-                System.out.print(pair.getKey().getName()+" ");
-                pair.getValue().printAction();
-                System.out.print(" , ");
-            }
-            System.out.println();
-            System.out.println("_______________");
-
-        }
+//        int n = 0;
+//        for (HashMap<Symbol, ParseAction> row: parseTable) {
+//            System.out.println(n++);
+//            for (Map.Entry<Symbol, ParseAction> pair: row.entrySet()) {
+//                System.out.print(pair.getKey().getName()+" ");
+//                pair.getValue().printAction();
+//                System.out.print(" , ");
+//            }
+//            System.out.println();
+//            System.out.println("_______________");
+//
+//        }
 
 
         return parseTable;
