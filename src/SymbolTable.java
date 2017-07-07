@@ -41,14 +41,25 @@ public class SymbolTable {
 
     }
 
-    public void getID() {
-
+    public SymbolTableEntry findWithID(String name) {
+        SymbolTableEntry toRet = null;
+        for (int i = 0; i < symbolTable.size(); i++) {
+            SymbolTableEntry ste = symbolTable.get(i);
+            if (name.equals(ste.getName()))
+                toRet = ste;
+        }
+        return toRet;
     }
 
-    public int findAddr(String name){
+
+    public SymbolTableEntry getEntry(int index){
+        return symbolTable.get(index);
+    }
+
+    public int findAddr(String name) {
         int address = -1;
         for (SymbolTableEntry ste : symbolTable) {
-            if(name.equals(ste.getName())){
+            if (name.equals(ste.getName())) {
                 address = ste.getAddress();
             }
         }
@@ -56,8 +67,8 @@ public class SymbolTable {
     }
 
 
-    public void print(){
-        for (SymbolTableEntry ste: symbolTable) {
+    public void print() {
+        for (SymbolTableEntry ste : symbolTable) {
             System.out.println("ste = " + ste.print());
         }
     }
