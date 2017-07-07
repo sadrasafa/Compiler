@@ -365,7 +365,7 @@ public class Grammar {
         symbols.addAll(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symRelExpression, symAnd, symRelTerm, symEquals, symLess, symAddOp)));
         symbols.addAll(new ArrayList<>(Arrays.asList(symTerm, symPlus, symMinus, symMulOp, symTimes, symDivision, symFactor, symCall, symArgs, symArgsList)));
 
-        symbols.addAll(new ArrayList<>(Arrays.asList(asPushID, asDefVar, asPushNum, asDefArr, asDefFunc, asAssignPars, asReturnToMain, asDefVarForFunc, asDefArrForFunc)));
+        symbols.addAll(new ArrayList<>(Arrays.asList(asPushID, asDefVar, asPushNum, asDefArr, asDefFunc, asAssignPars, asReturnToMain, asPushInt, asPushVoid, asDefVarForFunc, asDefArrForFunc)));
         symbols.addAll(new ArrayList<>(Arrays.asList(asPid,  asAssign, asJpf, asSave, asJpf_save, asJp, asLabel, asWhile, asReturn, asAid, asAnd)));
         symbols.addAll(new ArrayList<>(Arrays.asList(asEquals, asLessThan, asAddOrSub, asPushAdd, asPushSub, asMultOrDiv, asPushMult, asPushDiv, asPushAddrForJump, asCall)));
 
