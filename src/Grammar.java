@@ -334,7 +334,7 @@ public class Grammar {
         Symbol asAssign = new Symbol("#assign");
         Symbol asSave = new Symbol("#save");
         Symbol asJpf = new Symbol("#jpf");
-        Symbol asJpf_save = new Symbol("jpf_save");
+        Symbol asJpf_save = new Symbol("#jpf_save");
         Symbol asJp = new Symbol("#jp");
         Symbol asLabel = new Symbol("#label");
         Symbol asWhile = new Symbol("#while");
