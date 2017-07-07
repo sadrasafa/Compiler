@@ -1,3 +1,4 @@
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.*;
 
 /**
@@ -15,7 +16,8 @@ public class Grammar {
 //        createSimpleGrammar();
 //        createAdvancedGrammar();
 //        createDefaultGrammar();
-        createGrammar1();
+//        createGrammar1();
+        createGrammar2();
 //        computeFirst();
 //        computeFollow();
 //        printPoxlarinMaanisi();
@@ -34,18 +36,19 @@ public class Grammar {
         for (Symbol nt: getNonTerminals()) {
             System.out.print(nt.getPox()+" = "+nt.getName()+" : ");
             for (Symbol firsts: nt.getFirst()) {
-                System.out.print(firsts.getPox()+" ,");
+                System.out.print(firsts.getName()+", ");
             }
             System.out.println();
         }
     }
+
 
     private void printFollow() {
         System.out.println("FOLLOWWWWWWWWW");
         for (Symbol nt: getNonTerminals()){
             System.out.print(nt.getPox()+" = "+nt.getName()+" : ");
             for (Symbol follows: nt.getFollow()) {
-                System.out.print(follows.getPox()+" ,");
+                System.out.print(follows.getName()+", ");
             }
             System.out.println();
         }
@@ -251,9 +254,331 @@ public class Grammar {
         symArgs.setFollow(new ArrayList<>(Arrays.asList(symClosePar))); //#
         symArgsList.setFollow(new ArrayList<>(Arrays.asList(symComma, symClosePar))); //$
 
+
+//        printFirst();
+//        printFollow();
+
 //        printPoxFollow();
 
     }
+
+
+    private void createGrammar2() {
+
+        Symbol symProgram = new Symbol("Program", false);
+        Symbol symDeclarationList = new Symbol("DeclarationList", false);
+        Symbol symEOF = new Symbol("EOF", true);
+        Symbol symDeclaration = new Symbol("Declaration", false);
+        Symbol symVarDeclaration = new Symbol("VarDeclaration", false);
+        Symbol symFunDeclaration = new Symbol("FunDeclaration", false);
+        Symbol symID = new Symbol("ID", true);
+        Symbol symOpenBrace = new Symbol("[", true);
+        Symbol symNum = new Symbol("NUM", true);
+        Symbol symCloseBrace = new Symbol("]", true);
+        Symbol symInt = new Symbol("int", true);
+        Symbol symFunRetType = new Symbol("FunReturnType", false);
+        Symbol symParams = new Symbol("Params", false);
+        Symbol symCompoundStmt = new Symbol("CompoundStmt", false);
+        Symbol symVoid = new Symbol("void", true);
+        Symbol symParamList = new Symbol("ParamList", false);
+        Symbol symComma = new Symbol(",", true);
+        Symbol symParam = new Symbol("Param", false);
+        Symbol symOpenAk = new Symbol("{", true);
+        Symbol symLocalDeclarations = new Symbol("LocalDeclarations", false);
+        Symbol symStatementList = new Symbol("StatementList", false);
+        Symbol symCloseAk = new Symbol("}", true);
+        Symbol symStatement = new Symbol("Statement", false);
+        Symbol symExpressionStmt = new Symbol("ExpressionStmt", false);
+        Symbol symSelectionStmt = new Symbol("SelectionStmt", false);
+        Symbol symIterationStmt = new Symbol("IterationStmt", false);
+        Symbol symReturnStmt = new Symbol("ReturnStmt", false);
+        Symbol symVar = new Symbol("Var", false);
+        Symbol symAssign = new Symbol("=", true);
+        Symbol symExpression = new Symbol("Expression", false);
+        Symbol symSemicolon = new Symbol(";", true);
+        Symbol symIf = new Symbol("if", true);
+        Symbol symOpenPar = new Symbol("(", true);
+        Symbol symGenExpression = new Symbol("GenExpression", false);
+        Symbol symClosePar = new Symbol(")", true);
+        Symbol symElse = new Symbol("else", true);
+        Symbol symWhile = new Symbol("while", true);
+        Symbol symReturn = new Symbol("return", true);
+        Symbol symRelExpression = new Symbol("RelExpression", false);
+        Symbol symAnd = new Symbol("&&", true);
+        Symbol symRelTerm = new Symbol("RelTerm", false);
+        Symbol symEquals = new Symbol("==", true);
+        Symbol symLess = new Symbol("<", true);
+        Symbol symAddOp = new Symbol("AddOp", false);
+        Symbol symTerm = new Symbol("Term", false);
+        Symbol symPlus = new Symbol("+", true);
+        Symbol symMinus = new Symbol("-", true);
+        Symbol symMulOp = new Symbol("MulOp", false);
+        Symbol symTimes = new Symbol("*", true);
+        Symbol symDivision = new Symbol("/", true);
+        Symbol symFactor = new Symbol("Factor", false);
+        Symbol symCall = new Symbol("Call", false);
+        Symbol symArgs = new Symbol("args", false);
+        Symbol symArgsList = new Symbol("ArgList", false);
+
+        //ActionSymbollar
+        Symbol asPushID = new Symbol("#pushID");
+        Symbol asDefVar = new Symbol("#defVar");
+        Symbol asPushNum = new Symbol("#pushNUM");
+        Symbol asDefArr = new Symbol("#defArr");
+        Symbol asDefFunc = new Symbol("#defFunc");
+        Symbol asAssignPars = new Symbol("#assignPars");
+        Symbol asDefVarForFunc = new Symbol("#defVarForFunc");
+        Symbol asDefArrForFunc = new Symbol("#defArrForFunc");
+        Symbol asPid = new Symbol("#pid");
+        Symbol asAssign = new Symbol("#assign");
+        Symbol asSave = new Symbol("#save");
+        Symbol asJpf = new Symbol("#jpf");
+        Symbol asJpf_save = new Symbol("jpf_save");
+        Symbol asJp = new Symbol("#jp");
+        Symbol asLabel = new Symbol("#label");
+        Symbol asWhile = new Symbol("#while");
+        Symbol asReturn = new Symbol("#return");
+        Symbol asAid = new Symbol("#aid");
+        Symbol asAnd = new Symbol("#and");
+        Symbol asEquals = new Symbol("#equals");
+        Symbol asLessThan = new Symbol("#lessthan");
+        Symbol asAddOrSub = new Symbol("#addOrSub");
+        Symbol asPushAdd = new Symbol("#pushAdd");
+        Symbol asPushSub = new Symbol("#pushSub");
+        Symbol asMultOrDiv = new Symbol("#multOrDiv");
+        Symbol asPushMult = new Symbol("#pushMult");
+        Symbol asPushDiv = new Symbol("#pushDiv");
+        Symbol asPushAddrForJump = new Symbol("#pushAddrForJump");
+        Symbol asCall = new Symbol("#call");
+
+
+
+
+        symbols = new ArrayList<>(Arrays.asList(symProgram, symDeclarationList, symEOF, symDeclaration, symVarDeclaration));
+        symbols.addAll(new ArrayList<>(Arrays.asList(symFunDeclaration, symID, symOpenBrace, symNum, symCloseBrace,symInt)));
+        symbols.addAll(new ArrayList<>(Arrays.asList(symFunRetType, symParams, symCompoundStmt, symVoid, symParamList, symComma, symParam, symOpenAk, symCloseAk)));
+        symbols.addAll(new ArrayList<>(Arrays.asList(symLocalDeclarations, symStatementList, symStatement, symExpressionStmt, symSelectionStmt, symIterationStmt, symReturnStmt)));
+        symbols.addAll(new ArrayList<>(Arrays.asList(symVar, symAssign, symExpression, symSemicolon, symIf, symOpenPar, symGenExpression, symClosePar)));
+        symbols.addAll(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symRelExpression, symAnd, symRelTerm, symEquals, symLess, symAddOp)));
+        symbols.addAll(new ArrayList<>(Arrays.asList(symTerm, symPlus, symMinus, symMulOp, symTimes, symDivision, symFactor, symCall, symArgs, symArgsList)));
+
+        symbols.addAll(new ArrayList<>(Arrays.asList(asPushID, asDefVar, asPushNum, asDefArr, asDefFunc, asAssignPars, asDefVarForFunc, asDefArrForFunc)));
+        symbols.addAll(new ArrayList<>(Arrays.asList(asPid,  asAssign, asJpf, asSave, asJpf_save, asJp, asLabel, asWhile, asReturn, asAid, asAnd)));
+        symbols.addAll(new ArrayList<>(Arrays.asList(asEquals, asLessThan, asAddOrSub, asPushAdd, asPushSub, asMultOrDiv, asPushMult, asPushDiv, asPushAddrForJump, asCall)));
+
+        //        System.out.println("Symbols size: "+symbols.size());
+
+
+        Production p0 = new Production(symS, new Symbol[]{symProgram});
+        Production p1 = new Production(symProgram, new Symbol[]{symDeclarationList, symEOF});
+        Production p2_1 = new Production(symDeclarationList, new Symbol[]{symDeclarationList, symDeclaration});
+        Production p2_2 = new Production(symDeclarationList, new Symbol[]{symDeclaration});
+        Production p3_1 = new Production(symDeclaration, new Symbol[]{symVarDeclaration});
+        Production p3_2 = new Production(symDeclaration, new Symbol[]{symFunDeclaration});
+        Production p4_1 = new Production(symVarDeclaration, new Symbol[]{symFunRetType, symID, asPushID, symSemicolon, asDefVar});
+        Production p4_2 = new Production(symVarDeclaration, new Symbol[]{symFunRetType, symID, asPushID, symOpenBrace, symNum, asPushNum,  symCloseBrace, asDefArr, symSemicolon});
+//        Production p5 = new Production(symTypeSpecifier, new Symbol[]{symInt});
+        Production p6 = new Production(symFunDeclaration, new Symbol[]{symFunRetType, symID, asPushID, asDefFunc, symOpenPar, symParams, symClosePar, asAssignPars, symCompoundStmt});
+        Production p7_1 = new Production(symFunRetType, new Symbol[]{symInt});
+        Production p7_2 = new Production(symFunRetType, new Symbol[]{symVoid});
+        Production p8_1 = new Production(symParams, new Symbol[]{symParamList});
+        Production p8_2 = new Production(symParams, new Symbol[]{symVoid});
+        Production p9_1 = new Production(symParamList, new Symbol[]{symParamList, symComma, symParam});
+        Production p9_2 = new Production(symParamList, new Symbol[]{symParam});
+        Production p10_1 = new Production(symParam, new Symbol[]{symFunRetType, symID, asPushID, asDefVarForFunc});
+        Production p10_2 = new Production(symParam, new Symbol[]{symFunRetType, symID, asPushID, asDefArrForFunc,  symOpenBrace, symCloseBrace});
+        Production p11 = new Production(symCompoundStmt, new Symbol[]{symOpenAk, symLocalDeclarations, symStatementList, symCloseAk});
+        Production p12_1 = new Production(symLocalDeclarations, new Symbol[]{symLocalDeclarations, symVarDeclaration});
+        Production p12_2 = new Production(symLocalDeclarations);
+        Production p13_1 = new Production(symStatementList, new Symbol[]{symStatementList, symStatement});
+        Production p13_2 = new Production(symStatementList);
+        Production p14_1 = new Production(symStatement, new Symbol[]{symExpressionStmt});
+        Production p14_2 = new Production(symStatement, new Symbol[]{symCompoundStmt});
+        Production p14_3 = new Production(symStatement, new Symbol[]{symSelectionStmt});
+        Production p14_4 = new Production(symStatement, new Symbol[]{symIterationStmt});
+        Production p14_5 = new Production(symStatement, new Symbol[]{symReturnStmt});
+        Production p15_1 = new Production(symExpressionStmt, new Symbol[]{symVar, asPid, symAssign, symExpression, asAssign, symSemicolon});
+        Production p15_2 = new Production(symExpressionStmt, new Symbol[]{symSemicolon});
+        Production p16_1 = new Production(symSelectionStmt, new Symbol[]{symIf, symOpenPar, symGenExpression, symClosePar, asSave,  symStatement, asJpf});
+        Production p16_2 = new Production(symSelectionStmt, new Symbol[]{symIf, symOpenPar, symGenExpression, symClosePar, asSave, symStatement, symElse, asJpf_save, symStatement, asJp});
+        Production p17 = new Production(symIterationStmt, new Symbol[]{symWhile, asLabel, symOpenPar, symGenExpression, symClosePar, asSave, symStatement, asWhile});
+        Production p18_1 = new Production(symReturnStmt, new Symbol[]{symReturn, symSemicolon});
+        Production p18_2 = new Production(symReturnStmt, new Symbol[]{symReturn, symGenExpression, asReturn, symSemicolon});
+        Production p19_1 = new Production(symVar, new Symbol[]{symID, asPid});
+        Production p19_2 = new Production(symVar, new Symbol[]{symID, asPid, symOpenBrace, symExpression, asAid, symCloseBrace});
+        Production p20_1 = new Production(symGenExpression, new Symbol[]{symRelExpression});
+        Production p20_2 = new Production(symGenExpression, new Symbol[]{symExpression});
+        Production p21_1 = new Production(symRelExpression, new Symbol[]{symRelExpression, symAnd, symRelTerm , asAnd});
+        Production p21_2 = new Production(symRelExpression, new Symbol[]{symRelTerm});
+        Production p22_1 = new Production(symRelTerm, new Symbol[]{symExpression, symEquals, symExpression, asEquals});
+        Production p22_2 = new Production(symRelTerm, new Symbol[]{symExpression, symLess, symExpression, asLessThan});
+        Production p23_1 = new Production(symExpression, new Symbol[]{symExpression, symAddOp, symTerm, asAddOrSub});
+        Production p23_2 = new Production(symExpression, new Symbol[]{symTerm});
+        Production p24_1 = new Production(symAddOp, new Symbol[]{symPlus, asPushAdd});
+        Production p24_2 = new Production(symAddOp, new Symbol[]{symMinus, asPushSub});
+        Production p25_1 = new Production(symTerm, new Symbol[]{symTerm, symMulOp, symFactor, asMultOrDiv});
+        Production p25_2 = new Production(symTerm, new Symbol[]{symFactor});
+        Production p26_1 = new Production(symMulOp, new Symbol[]{symTimes, asPushMult});
+        Production p26_2 = new Production(symMulOp, new Symbol[]{symDivision, asPushDiv});
+        Production p27_1 = new Production(symFactor, new Symbol[]{symOpenPar, symExpression, symClosePar});
+        Production p27_2 = new Production(symFactor, new Symbol[]{symVar});
+        Production p27_3 = new Production(symFactor, new Symbol[]{symCall});
+        Production p27_4 = new Production(symFactor, new Symbol[]{symNum, asPushNum});
+        Production p28 = new Production(symCall, new Symbol[]{symID, asPushAddrForJump, symOpenPar, symArgs, symClosePar, asCall});
+        Production p29_1 = new Production(symArgs, new Symbol[]{symArgsList});
+        Production p29_2 = new Production(symArgs);
+        Production p30_1 = new Production(symArgsList, new Symbol[]{symArgsList, symComma, symExpression});
+        Production p30_2 = new Production(symArgsList, new Symbol[]{symExpression});
+
+        Production pPushID = new Production(asPushID);
+        Production pDefVar = new Production(asDefVar);
+        Production pPushNum = new Production(asPushNum);
+        Production pDefArr = new Production(asDefArr);
+        Production pDefFunc = new Production(asDefFunc);
+        Production pAssignPars = new Production(asAssignPars);
+        Production pDefVarForFunc = new Production(asDefVarForFunc);
+        Production pDefArrForFunc = new Production(asDefArrForFunc);
+        Production pPid = new Production(asPid);
+        Production pAssign = new Production(asAssign);
+        Production pSave = new Production(asSave);
+        Production pJpf = new Production(asJpf);
+        Production pJp = new Production(asJp);
+        Production pJpf_save = new Production(asJpf_save);
+        Production pLabel = new Production(asLabel);
+        Production pWhile = new Production(asWhile);
+        Production pReturn = new Production(asReturn);
+        Production pAid = new Production(asAid);
+        Production pAnd = new Production(asAnd);
+        Production pEquals = new Production(asEquals);
+        Production pLessthan = new Production(asLessThan);
+        Production pAddOrSub = new Production(asAddOrSub);
+        Production pPushAdd = new Production(asPushAdd);
+        Production pPushSub = new Production(asPushSub);
+        Production pMultOrDiv = new Production(asMultOrDiv);
+        Production pPushMult = new Production(asPushMult);
+        Production pPushDiv = new Production(asPushDiv);
+        Production pPushAddrForJump = new Production(asPushAddrForJump);
+        Production pCall = new Production(asCall);
+
+
+        productions = new ArrayList<>(Arrays.asList(p0, p1, p2_1, p2_2, p3_1, p3_2, p4_1, p4_2, p6, p7_1, p7_2, p8_1, p8_2, p9_1, p9_2, p10_1, p10_2));
+        productions.addAll(new ArrayList<>(Arrays.asList(p11, p12_1, p12_2, p13_1, p13_2, p14_1, p14_2, p14_3, p14_4, p14_5, p15_1, p15_2, p16_1, p16_2)));
+        productions.addAll(new ArrayList<>(Arrays.asList(p17, p18_1, p18_2, p19_1, p19_2, p20_1, p20_2, p21_1, p21_2, p22_1, p22_2, p23_1, p23_2, p24_1, p24_2)));
+        productions.addAll(new ArrayList<>(Arrays.asList(p25_1, p25_2, p26_1, p26_2, p27_1, p27_2, p27_3, p27_4, p28, p29_1, p29_2, p30_1, p30_2)));
+
+        productions.addAll(new ArrayList<>(Arrays.asList(pPushID, pDefVar, pPushNum, pDefArr, pDefFunc, pAssignPars)));
+        productions.addAll(new ArrayList<>(Arrays.asList(pDefVarForFunc, pDefArrForFunc, pAssign, pSave, pJpf, pJpf_save, pJp)));
+        productions.addAll(new ArrayList<>(Arrays.asList(pLabel, pWhile, pReturn, pPid, pAid, pAnd, pEquals, pLessthan, pAddOrSub, pPushAdd, pPushSub)));
+        productions.addAll(new ArrayList<>(Arrays.asList(pMultOrDiv, pPushMult, pPushDiv, pPushAddrForJump, pCall)));
+
+
+//        printAllProductions();
+
+        symS.setFirst(new ArrayList<>(Arrays.asList(symInt, symVoid)));
+        symProgram.setFirst(new ArrayList<>(Arrays.asList(symInt, symVoid))); //A
+        symDeclarationList.setFirst(new ArrayList<>(Arrays.asList(symInt, symVoid))); //B
+        symDeclaration.setFirst(new ArrayList<>(Arrays.asList(symInt, symVoid))); //C
+        symVarDeclaration.setFirst(new ArrayList<>(Arrays.asList(symInt, symVoid))); //D
+        symFunDeclaration.setFirst(new ArrayList<>(Arrays.asList(symInt, symVoid))); //E
+        symFunRetType.setFirst(new ArrayList<>(Arrays.asList(symInt, symVoid))); //F
+        symParams.setFirst(new ArrayList<>(Arrays.asList(symInt, symVoid))); //G
+        symCompoundStmt.setFirst(new ArrayList<>(Arrays.asList(symOpenAk))); //H
+        symParamList.setFirst(new ArrayList<>(Arrays.asList(symInt, symVoid))); //I
+        symParam.setFirst(new ArrayList<>(Arrays.asList(symInt, symVoid))); //J
+        symLocalDeclarations.setFirst(new ArrayList<>(Arrays.asList(symEps, symInt, symVoid))); //K
+        symStatementList.setFirst(new ArrayList<>(Arrays.asList(symEps, symWhile, symReturn, symID, symOpenAk, symSemicolon, symIf))); //L //L
+        symStatement.setFirst(new ArrayList<>(Arrays.asList(symWhile, symReturn, symID, symOpenAk, symSemicolon, symIf))); //M
+        symExpressionStmt.setFirst(new ArrayList<>(Arrays.asList(symID, symSemicolon))); //N
+        symSelectionStmt.setFirst(new ArrayList<>(Arrays.asList(symIf))); //O
+        symIterationStmt.setFirst(new ArrayList<>(Arrays.asList(symWhile))); //P
+        symReturnStmt.setFirst(new ArrayList<>(Arrays.asList(symReturn))); //Q
+        symVar.setFirst(new ArrayList<>(Arrays.asList(symID))); //R
+        symExpression.setFirst(new ArrayList<>(Arrays.asList(symOpenPar, symID, symNum))); //S
+        symGenExpression.setFirst(new ArrayList<>(Arrays.asList(symOpenPar, symID, symNum))); //T
+        symRelExpression.setFirst(new ArrayList<>(Arrays.asList(symOpenPar, symID, symNum))); //U
+        symRelTerm.setFirst(new ArrayList<>(Arrays.asList(symOpenPar, symID, symNum))); //V
+        symAddOp.setFirst(new ArrayList<>(Arrays.asList(symPlus, symMinus))); //W
+        symTerm.setFirst(new ArrayList<>(Arrays.asList(symOpenPar, symID, symNum))); //X
+        symMulOp.setFirst(new ArrayList<>(Arrays.asList(symTimes, symDivision))); //Y
+        symFactor.setFirst(new ArrayList<>(Arrays.asList(symOpenPar, symID, symNum))); //Z
+        symCall.setFirst(new ArrayList<>(Arrays.asList(symID))); //@
+        symArgs.setFirst(new ArrayList<>(Arrays.asList(symEps, symOpenPar, symID, symNum))); //#
+        symArgsList.setFirst(new ArrayList<>(Arrays.asList(symOpenPar, symID, symNum))); //$
+
+//        printPoxFirst();
+
+        symS.setFollow(new ArrayList<>(Arrays.asList(symDollar)));
+        symProgram.setFollow(new ArrayList<>(Arrays.asList(symDollar))); //A
+        symDeclarationList.setFollow(new ArrayList<>(Arrays.asList(symEOF, symInt, symVoid))); //B
+        symDeclaration.setFollow(new ArrayList<>(Arrays.asList(symEOF, symInt, symVoid))); //C
+        symVarDeclaration.setFollow(new ArrayList<>(Arrays.asList(symEOF, symWhile, symReturn, symID, symInt, symVoid, symOpenAk, symCloseAk, symSemicolon, symIf))); //D
+        symFunDeclaration.setFollow(new ArrayList<>(Arrays.asList(symEOF, symInt, symVoid))); //E
+        symFunRetType.setFollow(new ArrayList<>(Arrays.asList(symID))); //F
+        symParams.setFollow(new ArrayList<>(Arrays.asList(symClosePar))); //G
+        symCompoundStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symEOF, symWhile, symReturn, symID, symInt, symVoid, symOpenAk, symCloseAk, symSemicolon, symIf))); //H
+        symParamList.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symComma))); //I
+        symParam.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symComma))); //J
+        symLocalDeclarations.setFollow(new ArrayList<>(Arrays.asList(symWhile, symReturn, symID, symInt, symVoid, symOpenAk, symCloseAk, symSemicolon, symIf))); //K
+        symStatementList.setFollow(new ArrayList<>(Arrays.asList(symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf))); //L
+        symStatement.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf))); //M
+        symExpressionStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf))); //N
+        symSelectionStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf))); //O
+        symIterationStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf))); //P
+        symReturnStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID,  symOpenAk, symCloseAk, symSemicolon, symIf))); //Q
+        symVar.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symAssign, symSemicolon))); //R
+        symExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symSemicolon))); //S
+        symGenExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symSemicolon))); //T
+        symRelExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symSemicolon))); //U
+        symRelTerm.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symSemicolon))); //V
+        symAddOp.setFollow(new ArrayList<>(Arrays.asList(symOpenPar, symID, symNum))); // W
+        symTerm.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symSemicolon))); //X
+        symMulOp.setFollow(new ArrayList<>(Arrays.asList(symOpenPar, symID, symNum))); //Y
+        symFactor.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symSemicolon))); //Z
+        symCall.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symSemicolon))); //@
+        symArgs.setFollow(new ArrayList<>(Arrays.asList(symClosePar))); //#
+        symArgsList.setFollow(new ArrayList<>(Arrays.asList(symComma, symClosePar))); //$
+
+
+        asPushID.setFollow(new ArrayList<>(Arrays.asList(symSemicolon, symOpenBrace, symOpenPar, symClosePar, symComma)));
+        asDefVar.setFollow(symVarDeclaration.getFollow());
+        asPushNum.setFollow(new ArrayList<>(Arrays.asList(symCloseBrace)));
+        asPushNum.addFollow(symFactor.getFollow());
+        asDefArr.setFollow(new ArrayList<>(Arrays.asList(symSemicolon)));
+        asDefFunc.setFollow(new ArrayList<>(Arrays.asList(symOpenPar)));
+        asAssignPars.setFollow(symCompoundStmt.getFirst()); //todo bax gor  compoundStmt epsilona getsa,funDeclarationin followsun da garah izafaladasan
+        asDefVarForFunc.setFollow(symParam.getFollow());
+        asDefArrForFunc.setFollow(new ArrayList<>(Arrays.asList(symOpenBrace)));
+        asAssign.setFollow(new ArrayList<>(Arrays.asList(symSemicolon)));
+        asSave.setFollow(symStatement.getFirst()); // first statement da epsiln olsa, follow(selectionStmt) va follow(IterationStmt) izafalat
+        asJpf.setFollow(symSelectionStmt.getFollow());
+        asJpf_save.setFollow(symStatement.getFirst()); // firststatement epsiloni olsa, follow(selectionStmt) toh
+        asJp.setFollow(symSelectionStmt.getFollow());
+        asLabel.setFollow(new ArrayList<>(Arrays.asList(symOpenPar)));
+        asWhile.setFollow(symIterationStmt.getFollow());
+        asReturn.setFollow(new ArrayList<>(Arrays.asList(symSemicolon)));
+        asPid.setFollow(symVar.getFollow());
+        asPid.addFollow(new ArrayList<>(Arrays.asList(symAssign, symOpenBrace)));
+        asAid.setFollow(new ArrayList<>(Arrays.asList(symCloseBrace)));
+        asAnd.setFollow(symRelExpression.getFollow());
+        asEquals.setFollow(symRelTerm.getFollow());
+        asLessThan.setFollow(symRelTerm.getFollow());
+        asAddOrSub.setFollow(symExpression.getFollow());
+        asPushAdd.setFollow(symAddOp.getFollow());
+        asPushSub.setFollow(symAddOp.getFollow());
+        asMultOrDiv.setFollow(symTerm.getFollow());
+        asPushMult.setFollow(symMulOp.getFollow());
+        asPushDiv.setFollow(symMulOp.getFollow());
+        asPushAddrForJump.setFollow(new ArrayList<>(Arrays.asList(symOpenPar)));
+        asCall.setFollow(symCall.getFollow());
+
+
+        printFirst();
+        printFollow();
+//        printPoxFollow();
+
+    }
+
+
     private void printPoxFirst() {
         System.out.println("POX FIRSTLAR");
         for (Symbol nt: getNonTerminals()) {
@@ -838,18 +1163,18 @@ public class Grammar {
             parseTable.add(row);
         }
 
-//        int n = 0;
-//        for (HashMap<Symbol, ParseAction> row: parseTable) {
-//            System.out.println(n++);
-//            for (Map.Entry<Symbol, ParseAction> pair: row.entrySet()) {
-//                System.out.print(pair.getKey().getName()+" ");
-//                pair.getValue().printAction();
-//                System.out.print(" , ");
-//            }
-//            System.out.println();
-//            System.out.println("_______________");
-//
-//        }
+        int n = 0;
+        for (HashMap<Symbol, ParseAction> row: parseTable) {
+            System.out.println(n++);
+            for (Map.Entry<Symbol, ParseAction> pair: row.entrySet()) {
+                System.out.print(pair.getKey().getName()+" ");
+                pair.getValue().printAction();
+                System.out.print(" , ");
+            }
+            System.out.println();
+            System.out.println("_______________");
+
+        }
 
 
         return parseTable;

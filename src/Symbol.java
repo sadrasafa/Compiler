@@ -9,6 +9,7 @@ public class Symbol {
     int pox;
     private String name;
     private boolean terminal;
+    private boolean actionSymbol;
     private boolean firstChecked;
     private boolean followChecked;
 
@@ -17,6 +18,7 @@ public class Symbol {
     public Symbol(String name, boolean terminal) {
         this.name = name;
         this.terminal = terminal;
+        actionSymbol = false;
         firstChecked = false;
         followChecked = false;
         first = new ArrayList<>();
@@ -47,6 +49,18 @@ public class Symbol {
         }
         else
             pox = terminalPox++;
+    }
+
+    public Symbol(String name) {
+        this.name = name;
+        this.terminal = false;
+        this.actionSymbol = true;
+        first = new ArrayList<>();
+        follow = new ArrayList<>();
+    }
+
+    public boolean isActionSymbol() {
+        return actionSymbol;
     }
 
     public String getPox() {
