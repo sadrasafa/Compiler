@@ -243,7 +243,10 @@ public class ScannerCompiler {
                 } else if (token.equals("EOF")) {
                     returningToken = "EOF";
                     EOFGordum = true;
-                } else {
+                } else if (token.equals("output")) {
+                    returningToken = "output";
+                }
+                else {
                     returningToken = "ID";
                 }
 
