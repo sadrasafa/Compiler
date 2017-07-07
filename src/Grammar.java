@@ -328,6 +328,8 @@ public class Grammar {
         Symbol asDefFunc = new Symbol("#defFunc");
         Symbol asAssignPars = new Symbol("#assignPars");
         Symbol asReturnToMain = new Symbol("#returnToMain");
+        Symbol asPushInt = new Symbol("pushInt");
+        Symbol asPushVoid = new Symbol("pushVoid");
         Symbol asDefVarForFunc = new Symbol("#defVarForFunc");
         Symbol asDefArrForFunc = new Symbol("#defArrForFunc");
         Symbol asPid = new Symbol("#pid");
@@ -380,8 +382,8 @@ public class Grammar {
         Production p4_2 = new Production(symVarDeclaration, new Symbol[]{symFunRetType, symID, asPushID, symOpenBrace, symNum, asPushNum,  symCloseBrace, asDefArr, symSemicolon});
 //        Production p5 = new Production(symTypeSpecifier, new Symbol[]{symInt});
         Production p6 = new Production(symFunDeclaration, new Symbol[]{symFunRetType, symID, asPushID, asDefFunc, symOpenPar, symParams, symClosePar, asAssignPars, symCompoundStmt, asReturnToMain});
-        Production p7_1 = new Production(symFunRetType, new Symbol[]{symInt});
-        Production p7_2 = new Production(symFunRetType, new Symbol[]{symVoid});
+        Production p7_1 = new Production(symFunRetType, new Symbol[]{symInt, asPushInt});
+        Production p7_2 = new Production(symFunRetType, new Symbol[]{symVoid, asPushVoid});
         Production p8_1 = new Production(symParams, new Symbol[]{symParamList});
         Production p8_2 = new Production(symParams, new Symbol[]{symVoid});
         Production p9_1 = new Production(symParamList, new Symbol[]{symParamList, symComma, symParam});
@@ -576,7 +578,8 @@ public class Grammar {
         asPushAddrForJump.setFollow(new ArrayList<>(Arrays.asList(symOpenPar)));
         asCall.setFollow(symCall.getFollow());
         asReturnToMain.setFollow(symFunDeclaration.getFollow());
-
+        asPushInt.setFollow(symFunRetType.getFollow());
+        asPushVoid.setFollow(symFunRetType.getFollow());
 //        printFirst();
 //        printFollow();
 //        printPoxFollow();
