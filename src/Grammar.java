@@ -327,6 +327,7 @@ public class Grammar {
         Symbol asDefArr = new Symbol("#defArr");
         Symbol asDefFunc = new Symbol("#defFunc");
         Symbol asAssignPars = new Symbol("#assignPars");
+        Symbol asReturnToMain = new Symbol("#returnToMain");
         Symbol asDefVarForFunc = new Symbol("#defVarForFunc");
         Symbol asDefArrForFunc = new Symbol("#defArrForFunc");
         Symbol asPid = new Symbol("#pid");
@@ -362,7 +363,7 @@ public class Grammar {
         symbols.addAll(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symRelExpression, symAnd, symRelTerm, symEquals, symLess, symAddOp)));
         symbols.addAll(new ArrayList<>(Arrays.asList(symTerm, symPlus, symMinus, symMulOp, symTimes, symDivision, symFactor, symCall, symArgs, symArgsList)));
 
-        symbols.addAll(new ArrayList<>(Arrays.asList(asPushID, asDefVar, asPushNum, asDefArr, asDefFunc, asAssignPars, asDefVarForFunc, asDefArrForFunc)));
+        symbols.addAll(new ArrayList<>(Arrays.asList(asPushID, asDefVar, asPushNum, asDefArr, asDefFunc, asAssignPars, asReturnToMain, asDefVarForFunc, asDefArrForFunc)));
         symbols.addAll(new ArrayList<>(Arrays.asList(asPid,  asAssign, asJpf, asSave, asJpf_save, asJp, asLabel, asWhile, asReturn, asAid, asAnd)));
         symbols.addAll(new ArrayList<>(Arrays.asList(asEquals, asLessThan, asAddOrSub, asPushAdd, asPushSub, asMultOrDiv, asPushMult, asPushDiv, asPushAddrForJump, asCall)));
 
@@ -378,7 +379,7 @@ public class Grammar {
         Production p4_1 = new Production(symVarDeclaration, new Symbol[]{symFunRetType, symID, asPushID, symSemicolon, asDefVar});
         Production p4_2 = new Production(symVarDeclaration, new Symbol[]{symFunRetType, symID, asPushID, symOpenBrace, symNum, asPushNum,  symCloseBrace, asDefArr, symSemicolon});
 //        Production p5 = new Production(symTypeSpecifier, new Symbol[]{symInt});
-        Production p6 = new Production(symFunDeclaration, new Symbol[]{symFunRetType, symID, asPushID, asDefFunc, symOpenPar, symParams, symClosePar, asAssignPars, symCompoundStmt});
+        Production p6 = new Production(symFunDeclaration, new Symbol[]{symFunRetType, symID, asPushID, asDefFunc, symOpenPar, symParams, symClosePar, asAssignPars, symCompoundStmt, asReturnToMain});
         Production p7_1 = new Production(symFunRetType, new Symbol[]{symInt});
         Production p7_2 = new Production(symFunRetType, new Symbol[]{symVoid});
         Production p8_1 = new Production(symParams, new Symbol[]{symParamList});
@@ -459,7 +460,7 @@ public class Grammar {
         Production pPushDiv = new Production(asPushDiv);
         Production pPushAddrForJump = new Production(asPushAddrForJump);
         Production pCall = new Production(asCall);
-
+        Production pReturnToMain = new Production(asReturnToMain);
 
         productions = new ArrayList<>(Arrays.asList(p0, p1, p2_1, p2_2, p3_1, p3_2, p4_1, p4_2, p6, p7_1, p7_2, p8_1, p8_2, p9_1, p9_2, p10_1, p10_2));
         productions.addAll(new ArrayList<>(Arrays.asList(p11, p12_1, p12_2, p13_1, p13_2, p14_1, p14_2, p14_3, p14_4, p14_5, p15_1, p15_2, p16_1, p16_2)));
@@ -473,7 +474,7 @@ public class Grammar {
         productions.addAll(new ArrayList<>(Arrays.asList(pPushID, pDefVar, pPushNum, pDefArr, pDefFunc, pAssignPars)));
         productions.addAll(new ArrayList<>(Arrays.asList(pDefVarForFunc, pDefArrForFunc, pPid, pAssign, pSave, pJpf, pJp, pJpf_save)));
         productions.addAll(new ArrayList<>(Arrays.asList(pLabel, pWhile, pReturn, pAid, pAnd, pEquals, pLessthan, pAddOrSub, pPushAdd, pPushSub)));
-        productions.addAll(new ArrayList<>(Arrays.asList(pMultOrDiv, pPushMult, pPushDiv, pPushAddrForJump, pCall)));
+        productions.addAll(new ArrayList<>(Arrays.asList(pMultOrDiv, pPushMult, pPushDiv, pPushAddrForJump, pCall, pReturnToMain)));
 
 
 //        printAllProductions();
