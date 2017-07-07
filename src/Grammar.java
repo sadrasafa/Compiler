@@ -463,6 +463,8 @@ public class Grammar {
         Production pPushAddrForJump = new Production(asPushAddrForJump);
         Production pCall = new Production(asCall);
         Production pReturnToMain = new Production(asReturnToMain);
+        Production pPushInt = new Production(asPushInt);
+        Production pPushVoid = new Production(asPushVoid);
 
         productions = new ArrayList<>(Arrays.asList(p0, p1, p2_1, p2_2, p3_1, p3_2, p4_1, p4_2, p6, p7_1, p7_2, p8_1, p8_2, p9_1, p9_2, p10_1, p10_2));
         productions.addAll(new ArrayList<>(Arrays.asList(p11, p12_1, p12_2, p13_1, p13_2, p14_1, p14_2, p14_3, p14_4, p14_5, p15_1, p15_2, p16_1, p16_2)));
@@ -476,7 +478,7 @@ public class Grammar {
         productions.addAll(new ArrayList<>(Arrays.asList(pPushID, pDefVar, pPushNum, pDefArr, pDefFunc, pAssignPars)));
         productions.addAll(new ArrayList<>(Arrays.asList(pDefVarForFunc, pDefArrForFunc, pPid, pAssign, pSave, pJpf, pJp, pJpf_save)));
         productions.addAll(new ArrayList<>(Arrays.asList(pLabel, pWhile, pReturn, pAid, pAnd, pEquals, pLessthan, pAddOrSub, pPushAdd, pPushSub)));
-        productions.addAll(new ArrayList<>(Arrays.asList(pMultOrDiv, pPushMult, pPushDiv, pPushAddrForJump, pCall, pReturnToMain)));
+        productions.addAll(new ArrayList<>(Arrays.asList(pMultOrDiv, pPushMult, pPushDiv, pPushAddrForJump, pCall, pReturnToMain, pPushInt, pPushVoid)));
 
 
 //        printAllProductions();
