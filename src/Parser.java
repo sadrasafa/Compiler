@@ -30,6 +30,7 @@ public class Parser {
         stack.push(0);
         Integer top;
         Token tkn = scanner.getToken();
+        Token lastTkn = null;
         Symbol token = tkn.getSymbol(); //token = a
         ParseAction action;
         System.out.println("PARSING STARTED");
@@ -41,6 +42,7 @@ public class Parser {
             if (action.getType() == ParseAction.SHIFT) {
                 Integer t = action.getDest();
                 stack.push(t);
+                lastTkn = tkn;
                 tkn = scanner.getToken();
                 token = tkn.getSymbol();
                 System.out.println("PUSHED "+t);
@@ -63,7 +65,7 @@ public class Parser {
                 System.out.print("REDUCE : ");
                 production.printProduction();
                 if (A.isActionSymbol()) {
-                    codeGenerator.generateCode(A.getName(), tkn);
+                    codeGenerator.generateCode(A.getName(), lastTkn);
                 }
             }
             else if (action.getType() == ParseAction.ACC) {
@@ -75,6 +77,15 @@ public class Parser {
                 //todo error recovery
             }
         }
+
+        System.out.println("codeGenerator = " + codeGenerator.getPb().size());
+
+        ScannerCompiler.symbolTable.print();
+
+        for (int i = 0; i < codeGenerator.getPb().size(); i++) {
+            System.out.println("" + i  + " : " + codeGenerator.getPb().get(i));
+        }
+
 
     }
 

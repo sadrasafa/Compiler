@@ -68,8 +68,9 @@ public class SymbolTable {
 
 
     public void print() {
-        for (SymbolTableEntry ste : symbolTable) {
-            System.out.println("ste = " + ste.print());
+        for (int i = 0; i < symbolTable.size(); i++) {
+            SymbolTableEntry ste = symbolTable.get(i);
+            System.out.println(i + ". ste = " + ste.print());
         }
     }
 }
