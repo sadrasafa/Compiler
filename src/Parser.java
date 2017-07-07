@@ -35,13 +35,14 @@ public class Parser {
         ParseAction action;
         System.out.println("PARSING STARTED");
         while (true) {
-            System.out.println("_______________");
-            System.out.println("STACK: "+stack + "TOKEN: "+token.getName());
+//            System.out.println("_______________");
+//            System.out.println("STACK: "+stack + "TOKEN: "+token.getName());
             top = stack.peek();
             action = parseTable.get(top).get(token);
             if (action==null) {
                 //error recovery
                 boolean hasGoto = false;
+
                 while (true) {
                     for (Symbol nt: grammar.getNonTerminals()) {
                         if (parseTable.get(top).get(nt)!=null) {
@@ -83,13 +84,13 @@ public class Parser {
                 stack.push(t);
 
             }
-            if (action.getType() == ParseAction.SHIFT) {
+            else if (action.getType() == ParseAction.SHIFT) {
                 Integer t = action.getDest();
                 stack.push(t);
                 lastTkn = tkn;
                 tkn = scanner.getToken();
                 token = tkn.getSymbol();
-                System.out.println("PUSHED "+t);
+//                System.out.println("PUSHED "+t);
             }
             else if (action.getType() == ParseAction.REDUCE) {
                 int productionNumber = action.getDest();
@@ -106,8 +107,8 @@ public class Parser {
                 }
                 Integer t =  goTo.getDest(); //todo aya goTo si olmasa neyniyak? ya hammasha olar?
                 stack.push(t);
-                System.out.print("REDUCE : ");
-                production.printProduction();
+//                System.out.print("REDUCE : ");
+//                production.printProduction();
                 if (A.isActionSymbol()) {
                     codeGenerator.generateCode(A.getName(), lastTkn);
                 }
@@ -119,7 +120,7 @@ public class Parser {
             }
             else  {
                 //todo error recovery
-                System.out.println("BURA GARAH GIRMIYA USULAN :))");
+                System.out.println("BURA GARAH GIRMIYA USULAN :))" + action.getType());
             }
         }
 
