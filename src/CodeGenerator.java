@@ -1,3 +1,5 @@
+import org.omg.CORBA.INTERNAL;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -33,15 +35,12 @@ public class CodeGenerator {
     }
 
 
-    public Stack<Integer> getScopeStack() {
-        return scopeStack;
-    }
 
     public boolean generateCode(String action, Token lastToken) {
 
-        System.out.println("***************************************************************************************");
-        System.out.println("action = " + action);
-        System.out.println("lastToken = " + lastToken.print());
+//        System.out.println("***************************************************************************************");
+//        System.out.println("action = " + action);
+//        System.out.println("lastToken = " + lastToken.print());
 
 
         int top = ss.size() - 1;
@@ -61,14 +60,14 @@ public class CodeGenerator {
                 break;
             case "decScope":
                 int toRemove = scopeStack.pop();
-                int size = scopeStack.size();
                 st.remove(toRemove);
                 break;
             case "pid":
                 int p;
                 p = ScannerCompiler.symbolTable.getEntry(lastToken.getAttr()).getAddress();
-                if (p == -1) {
-                    System.out.println("ERROR");
+                if (p == 0) {
+                    System.out.println("ERROR!! No such variable!");
+                    return false;
                 }
                 ss.push("" + p);
 
@@ -79,11 +78,15 @@ public class CodeGenerator {
                 if (ss.get(top).contains("#")) {
                     stringNumber = ss.get(top).substring(1);
                     arrIndex = Integer.parseInt(stringNumber);
-//                    if(arrIndex > )
+                    if(arrIndex > st.getEntryWithAddr(Integer.parseInt(ss.get(top - 1))).getLimit()){
+                        System.out.println("ERROR!! Out of bound Exception!!!!");
+                        return false;
+                    }
                     p = Integer.parseInt(ss.get(top - 1)) + ((arrIndex) * 4); //base + displacement
                 } else {
-                    p = Integer.parseInt(ss.get(top - 1)) + (Integer.parseInt(ss.get(top)) * 4); //base + displacement
+                    p = Integer.parseInt(ss.get(top - 1)) + (Integer.parseInt(ss.get(top)) * 4); //base + displacement //todo number not right! 744!
                 }
+                ss.pop();
                 ss.pop();
                 ss.push("" + p);
 
@@ -385,7 +388,6 @@ public class CodeGenerator {
             case "output":
                 pb.add(new Code(giveCode("PRINT", ss.pop())));
                 break;
-            // TODO: 06/07/17 More actions
         }
 
         System.out.println("SCOPE STACK: ");

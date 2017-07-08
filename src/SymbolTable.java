@@ -42,6 +42,7 @@ public class SymbolTable {
 
 
     }
+
     public void remove(int from) {
         int times = symbolTable.size() - from;
         for (int i = 0; i < times; i++) {
@@ -61,8 +62,18 @@ public class SymbolTable {
     }
 
 
-    public SymbolTableEntry getEntry(int index){
+    public SymbolTableEntry getEntry(int index) {
         return symbolTable.get(index);
+    }
+
+    public SymbolTableEntry getEntryWithAddr(int addr) {
+        for (SymbolTableEntry ste :
+                symbolTable) {
+            if (ste.getAddress() == addr) {
+                return ste;
+            }
+        }
+        return null;
     }
 
     public int findAddr(String name) {
@@ -82,6 +93,7 @@ public class SymbolTable {
             System.out.println(i + ". ste = " + ste.print());
         }
     }
+
     public int getSize() {
         return symbolTable.size();
     }
