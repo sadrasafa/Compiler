@@ -538,12 +538,12 @@ public class Grammar {
         symParamList.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symComma))); //I
         symParam.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symComma))); //J
         symLocalDeclarations.setFollow(new ArrayList<>(Arrays.asList(symWhile, symReturn, symID, symInt, symVoid, symOpenAk, symCloseAk, symSemicolon, symIf))); //K
-        symStatementList.setFollow(new ArrayList<>(Arrays.asList(symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf))); //L
-        symStatement.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf))); //M
-        symExpressionStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf))); //N
-        symSelectionStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf))); //O
-        symIterationStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf))); //P
-        symReturnStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID,  symOpenAk, symCloseAk, symSemicolon, symIf))); //Q
+        symStatementList.setFollow(new ArrayList<>(Arrays.asList(symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf, symOutputTerminal))); //L
+        symStatement.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf, symOutputTerminal))); //M
+        symExpressionStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf, symOutputTerminal))); //N
+        symSelectionStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf, symOutputTerminal))); //O
+        symIterationStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf, symOutputTerminal))); //P
+        symReturnStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID,  symOpenAk, symCloseAk, symSemicolon, symIf, symOutputTerminal))); //Q
         symVar.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symTimes, symDivision, symAssign, symSemicolon, symComma))); //R
 
         symExpression.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symAnd, symEquals, symCloseBrace, symLess, symPlus, symMinus, symSemicolon, symComma))); //S
@@ -596,8 +596,8 @@ public class Grammar {
         asOutput.setFollow(symStatement.getFollow());
         asIncScope.setFollow(new ArrayList<>(Arrays.asList(symInt, symVoid, symWhile, symReturn, symID, symOpenAk, symSemicolon, symIf, symCloseAk)));
         asDecScope.setFollow(symCompoundStmt.getFollow());
-//        printFirst();
-//        printFollow();
+        printFirst();
+        printFollow();
 //        printPoxFollow();
 //        printAllProductions();
 
@@ -940,9 +940,9 @@ public class Grammar {
 
         }
 //        LRcollections.get(0).printItemSet();
-//        for (ItemSet is : LRcollections) {
-//            is.showThisItemSet();
-//        }
+        for (ItemSet is : LRcollections) {
+            is.showThisItemSet();
+        }
 //        for (ItemSet is: LRcollections) {
 //            is.poxiGorsat();
 //        }
@@ -1188,18 +1188,18 @@ public class Grammar {
             parseTable.add(row);
         }
 
-//        int n = 0;
-//        for (HashMap<Symbol, ParseAction> row: parseTable) {
-//            System.out.println(n++);
-//            for (Map.Entry<Symbol, ParseAction> pair: row.entrySet()) {
-//                System.out.print(pair.getKey().getName()+" ");
-//                pair.getValue().printAction();
-//                System.out.print(" , ");
-//            }
-//            System.out.println();
-//            System.out.println("_______________");
-//
-//        }
+        int n = 0;
+        for (HashMap<Symbol, ParseAction> row: parseTable) {
+            System.out.println(n++);
+            for (Map.Entry<Symbol, ParseAction> pair: row.entrySet()) {
+                System.out.print(pair.getKey().getName()+" ");
+                pair.getValue().printAction();
+                System.out.print(" , ");
+            }
+            System.out.println();
+            System.out.println("_______________");
+
+        }
 
 
         return parseTable;
