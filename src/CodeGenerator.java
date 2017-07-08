@@ -142,7 +142,7 @@ public class CodeGenerator {
             case "save":
 
                 ss.push("" + pb.size());
-                System.out.println("pb.size() = " + pb.size());
+//                System.out.println("pb.size() = " + pb.size());
                 pb.add(new Code("NULL"));
 
                 break;
@@ -157,7 +157,7 @@ public class CodeGenerator {
                 break;
             case "jpf_save":
 
-                printSS();
+//                printSS();
                 pb.get(Integer.parseInt(ss.get(top))).setCode(giveCode("JPF", ss.get(top - 1), "" + (pb.size() + 1)));
                 ss.pop();
                 ss.pop();
@@ -327,7 +327,7 @@ public class CodeGenerator {
                 ss.push("!" + ste.getParamCount());
 
 
-                System.out.println("SORRY");
+//                System.out.println("SORRY");
 
 
 //                ss.pop();
@@ -388,7 +388,6 @@ public class CodeGenerator {
                 break;
 
             case "pushInt":
-//                System.out.println("FUCK");
                 ss.push("321");
                 break;
             case "pushVoid":
@@ -399,7 +398,7 @@ public class CodeGenerator {
                 break;
         }
 
-        System.out.println("SCOPE STACK: ");
+       /* System.out.println("SCOPE STACK: ");
         for (int i = 0; i < scopeStack.size(); i++) {
             System.out.println("scopeStack " + i + " = " + scopeStack.get(i));
         }
@@ -415,7 +414,7 @@ public class CodeGenerator {
         for (int i = 0; i < pb.size(); i++) {
             System.out.println("" + i + ". " + pb.get(i).getCode());
         }
-        System.out.println("---------------------------------");
+        System.out.println("---------------------------------");*/
 
         return true;
 

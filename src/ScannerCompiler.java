@@ -81,7 +81,7 @@ public class ScannerCompiler {
         invalidInVarOrNum.add('~');
 
 
-        System.out.println("code = " + code);
+//        System.out.println("code = " + code);
     }
 
 
