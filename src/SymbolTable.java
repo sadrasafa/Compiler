@@ -18,6 +18,7 @@ public class SymbolTable {
         symbolTable.add(new SymbolTableEntry("return", "RETURN"));
         symbolTable.add(new SymbolTableEntry("EOF", "EOF"));
         symbolTable.add(new SymbolTableEntry("int", "INT"));
+        symbolTable.add(new SymbolTableEntry("void", "VOID"));
 
         // TODO: 05/07/17 fill table
     }
