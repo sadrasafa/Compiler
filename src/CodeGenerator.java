@@ -248,7 +248,6 @@ public class CodeGenerator {
 
                 break;
             case "pushID":
-                System.out.println("HELLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLOOO");
                 ss.push("" + lastToken.getAttr());
                 break;
             case "pushNUM":
@@ -327,7 +326,7 @@ public class CodeGenerator {
                 funcIndex = lastToken.getAttr();
                 jumpAddr = ste.getFunctionAddressPB();
 
-                pb.add(new Code(giveCode("ASSIGN", "" + (temp2 + 2), "" + ste.getReturnAddr())));
+                pb.add(new Code(giveCode("ASSIGN", "" + (temp2 + ste.getParamCount() + 2), "" + ste.getReturnAddr())));
 
 
                 break;
@@ -346,20 +345,23 @@ public class CodeGenerator {
                     }
                 }
 
-                ss.push("" + ste.getReturnValueAddress());
+                t2 = gettemp();
+//                ss.push("" + ste.getReturnValueAddress());
 
                 pb.add(new Code(giveCode("JP", "" + jumpAddr)));
+                pb.add(new Code(giveCode("ASSIGN", "" + ste.getReturnValueAddress() , "" + t2)));
 
+                ss.push("" + t2);
 
 //                returnAddr.push(pb.size());
 
 
                 break;
             case "return":
-                t2 = gettemp();
+//                t2 = gettemp();
                 ste = st.getEntry(Integer.parseInt(ss.get(top - 1)));
                 pb.add(new Code(giveCode("ASSIGN", ss.get(top), "" + ste.getReturnValueAddress())));
-                pb.add(new Code(giveCode("ASSIGN", "" + ste.getReturnValueAddress() , "" + t2)));
+//                pb.add(new Code(giveCode("ASSIGN", "" + ste.getReturnValueAddress() , "" + t2)));
                 ss.pop();
                 break;
 
