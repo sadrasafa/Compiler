@@ -35,7 +35,7 @@ public class Parser {
         Token lastTkn = null;
         Symbol token = tkn.getSymbol(); //token = a
         ParseAction action;
-        System.out.println("PARSING STARTED");
+//        System.out.println("PARSING STARTED");
         while (goOn) {
 //            System.out.println("_______________");
 //            System.out.println("STACK: "+stack + "TOKEN: "+token.getName());
@@ -78,13 +78,13 @@ public class Parser {
                     }
                 } // NT is set or reached end of code
                 if (istadighimNT.getName().equals("dibaYetishdim")) {
-                    System.out.println("PANIC MODE REACHED END OF CODE");
+//                    System.out.println("PANIC MODE REACHED END OF CODE");
                     break;
                 }
                 action =  parseTable.get(top).get(istadighimNT);
                 Integer t = action.getDest();
                 stack.push(t);
-
+//                System.out.println("ABALFAZL");
             }
             else if (action.getType() == ParseAction.SHIFT) {
                 Integer t = action.getDest();
@@ -105,7 +105,7 @@ public class Parser {
                 Symbol A = production.getLHS();
                 ParseAction goTo = parseTable.get(top).get(A);
                 if (goTo==null) {
-                    System.out.println(A.getName()+" **************");
+//                    System.out.println(A.getName()+" **************");
                 }
                 Integer t =  goTo.getDest(); //todo aya goTo si olmasa neyniyak? ya hammasha olar?
                 stack.push(t);
@@ -113,23 +113,23 @@ public class Parser {
 //                production.printProduction();
                 if (A.isActionSymbol()) {
 
-                    System.out.println("lastTkn = " + lastTkn.getType());
-                    System.out.println("lastTkn = " + lastTkn.getAttr());
-                    System.out.println("Tkn = " + tkn.getType());
-                    System.out.println("Tkn = " + tkn.getAttr());
+//                    System.out.println("lastTkn = " + lastTkn.getType());
+//                    System.out.println("lastTkn = " + lastTkn.getAttr());
+//                    System.out.println("Tkn = " + tkn.getType());
+//                    System.out.println("Tkn = " + tkn.getAttr());
 
 
                     goOn = codeGenerator.generateCode(A.getName(), lastTkn);
                 }
             }
             else if (action.getType() == ParseAction.ACC) {
-                System.out.println("_________________");
-                System.out.println("PARSING IS DONE");
+//                System.out.println("_________________");
+//                System.out.println("PARSING IS DONE");
                 break;
             }
             else  {
                 //todo error recovery
-                System.out.println("BURA GARAH GIRMIYA USULAN :))" + action.getType());
+//                System.out.println("BURA GARAH GIRMIYA USULAN :))" + action.getType());
             }
         }
 
