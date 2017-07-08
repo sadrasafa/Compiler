@@ -530,14 +530,14 @@ public class Grammar {
         symProgram.setFollow(new ArrayList<>(Arrays.asList(symDollar))); //A
         symDeclarationList.setFollow(new ArrayList<>(Arrays.asList(symEOF, symInt, symVoid))); //B
         symDeclaration.setFollow(new ArrayList<>(Arrays.asList(symEOF, symInt, symVoid))); //C
-        symVarDeclaration.setFollow(new ArrayList<>(Arrays.asList(symEOF, symWhile, symReturn, symID, symInt, symVoid, symOpenAk, symCloseAk, symSemicolon, symIf))); //D
+        symVarDeclaration.setFollow(new ArrayList<>(Arrays.asList(symEOF, symWhile, symReturn, symID, symInt, symVoid, symOpenAk, symCloseAk, symSemicolon, symIf, symOutputTerminal))); //D
         symFunDeclaration.setFollow(new ArrayList<>(Arrays.asList(symEOF, symInt, symVoid))); //E
         symFunRetType.setFollow(new ArrayList<>(Arrays.asList(symID))); //F
         symParams.setFollow(new ArrayList<>(Arrays.asList(symClosePar))); //G
         symCompoundStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symEOF, symWhile, symReturn, symID, symInt, symVoid, symOpenAk, symCloseAk, symSemicolon, symIf))); //H
         symParamList.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symComma))); //I
         symParam.setFollow(new ArrayList<>(Arrays.asList(symClosePar, symComma))); //J
-        symLocalDeclarations.setFollow(new ArrayList<>(Arrays.asList(symWhile, symReturn, symID, symInt, symVoid, symOpenAk, symCloseAk, symSemicolon, symIf))); //K
+        symLocalDeclarations.setFollow(new ArrayList<>(Arrays.asList(symWhile, symReturn, symID, symInt, symVoid, symOpenAk, symCloseAk, symSemicolon, symIf, symOutputTerminal))); //K
         symStatementList.setFollow(new ArrayList<>(Arrays.asList(symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf, symOutputTerminal))); //L
         symStatement.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf, symOutputTerminal))); //M
         symExpressionStmt.setFollow(new ArrayList<>(Arrays.asList(symElse, symWhile, symReturn, symID, symOpenAk, symCloseAk, symSemicolon, symIf, symOutputTerminal))); //N
