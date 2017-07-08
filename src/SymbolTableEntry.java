@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Stack;
 
 /**
  * Created by aarash on 05/07/17.
@@ -17,6 +16,15 @@ public class SymbolTableEntry {
     private int returnAddr;
     private int limit = -1;
     private ArrayList<Integer> parameterAddresses = null;
+    private ArrayList<String> paramTypes = null;
+
+    public String getParamType(int i) {
+        return paramTypes.get(i);
+    }
+
+    public void addParamType(String type) {
+        paramTypes.add(type);
+    }
 
     public int getReturnValueAddress() {
         return returnValueAddress;
@@ -92,6 +100,7 @@ public class SymbolTableEntry {
     public void setFunction(boolean function) {
         if(function){
             parameterAddresses = new ArrayList<>();
+            paramTypes = new ArrayList<>();
         }
         this.function = function;
     }
