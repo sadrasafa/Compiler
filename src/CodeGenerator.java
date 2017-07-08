@@ -37,7 +37,7 @@ public class CodeGenerator {
         return scopeStack;
     }
 
-    public void generateCode(String action, Token lastToken) {
+    public boolean generateCode(String action, Token lastToken) {
 
         System.out.println("***************************************************************************************");
         System.out.println("action = " + action);
@@ -79,14 +79,12 @@ public class CodeGenerator {
                 if (ss.get(top).contains("#")) {
                     stringNumber = ss.get(top).substring(1);
                     arrIndex = Integer.parseInt(stringNumber);
+//                    if(arrIndex > ste)
+                    p = Integer.parseInt(ss.get(top - 1)) + (arrIndex) * 4; //base + displacement
 
-//                    if(arrIndex > )
-
-
+                } else {
+                    p = Integer.parseInt(ss.get(top - 1)) + (Integer.parseInt(ss.get(top)) * 4); //base + displacement
                 }
-
-                p = Integer.parseInt(ss.get(top - 1)) + (Integer.parseInt(ss.get(top)) * 4); //base + displacement
-
                 ss.pop();
                 ss.push("" + p);
 
@@ -172,8 +170,8 @@ public class CodeGenerator {
             case "defVar":
                 ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top)));
                 if (ss.get(top - 1).equals("000")) {
-                    System.out.println("ERROR!!!!");
-                    return; // TODO: 07/07/17 return false
+                    System.out.println("ERROR!!!! Can't define void parameter!");
+                    return false;
                 }
 //                ste = st.findWithID(input);
                 ste.setAddress(getAddress());
@@ -184,8 +182,8 @@ public class CodeGenerator {
                 ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top)));
 //                ste = st.findWithID(input);
                 if (ss.get(top - 1).equals("000")) {
-                    System.out.println("ERROR!!!!");
-                    return; // TODO: 07/07/17 return false
+                    System.out.println("ERROR!!!! Can't define void parameter!");
+                    return false;
                 }
 
 
@@ -201,8 +199,8 @@ public class CodeGenerator {
                 ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top)));
 //                ste = st.findWithID(input);
                 if (ss.get(top - 1).equals("000")) {
-                    System.out.println("ERROR!!!!");
-                    return; // TODO: 07/07/17 return false
+                    System.out.println("ERROR!!!! Can't define void parameter!");
+                    return false;
                 }
 
 
@@ -219,8 +217,8 @@ public class CodeGenerator {
                 num = Integer.parseInt(ss.get(top).substring(1));
 
                 if (ss.get(top - 2).equals("000")) {
-                    System.out.println("ERROR!!!!");
-                    return; // TODO: 07/07/17 return false
+                    System.out.println("ERROR!!!! Can't define void parameter!");
+                    return false;
                 }
 
                 ste.setLimit(num - 1);
@@ -408,7 +406,7 @@ public class CodeGenerator {
             System.out.println("" + i + ". " + pb.get(i).getCode());
         }
         System.out.println("---------------------------------");
-
+        return true;
     }
 
     private String giveCode(String op, String firstIn, String secondIn, String dest) {
