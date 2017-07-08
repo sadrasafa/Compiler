@@ -78,17 +78,26 @@ public class CodeGenerator {
                 if (ss.get(top).contains("#")) {
                     stringNumber = ss.get(top).substring(1);
                     arrIndex = Integer.parseInt(stringNumber);
-                    if(arrIndex > st.getEntryWithAddr(Integer.parseInt(ss.get(top - 1))).getLimit()){
+                    int limitt = st.getEntryWithAddr(Integer.parseInt(ss.get(top - 1))).getLimit();
+                    if(limitt != -1 && arrIndex > limitt){
                         System.out.println("ERROR!! Out of bound Exception!!!!");
                         return false;
                     }
-                    p = Integer.parseInt(ss.get(top - 1)) + ((arrIndex) * 4); //base + displacement
+//                    p = Integer.parseInt(ss.get(top - 1)) + ((arrIndex) * 4); //base + displacement
+                    t3 = gettemp();
+                    t2 = gettemp();
+                    pb.add(new Code(giveCode("MULT", "#4", ss.get(top), "" + t3)));
+                    pb.add(new Code(giveCode("ADD", "" + t3, ss.get(top - 1), "" + t2)));
                 } else {
-                    p = Integer.parseInt(ss.get(top - 1)) + (Integer.parseInt(ss.get(top)) * 4); //base + displacement //todo number not right! 744!
+                    t3 = gettemp();
+                    t2 = gettemp();
+                    pb.add(new Code(giveCode("MULT", "#4", ss.get(top), "" + t3)));
+                    pb.add(new Code(giveCode("ADD", "" + t3, ss.get(top - 1), "" + t2)));
+//                    p = Integer.parseInt(ss.get(top - 1)) + (Integer.parseInt(ss.get(top)) * 4); //base + displacement //todo number not right! 744!
                 }
                 ss.pop();
                 ss.pop();
-                ss.push("" + p);
+                ss.push("@" + t2);
 
                 break;
             case "addOrSub":
@@ -349,12 +358,12 @@ public class CodeGenerator {
 
                 for (int i = 0; i < ste.getParamCount(); i++) {
 
-                    if (ste.getParamType(i).equals("var")) {
-                        pb.add(new Code(giveCode("ASSIGN", ss.pop(), "" + ste.getParameterAddresses().get(i))));
-                        System.out.println("THAT'S " + i);
-                    } else if (ste.getParamType(i).equals("arr")) {
-                        pb.add(new Code(giveCode("ASSIGN", "#" + ss.pop(), "" + ste.getParameterAddresses().get(i))));
-                        System.out.println("THAT'S " + i);
+                    if (ste.getParamType(ste.getParamCount()-i-1).equals("var")) {
+                        pb.add(new Code(giveCode("ASSIGN", ss.pop(), "" + ste.getParameterAddresses().get(ste.getParamCount()-i-1))));
+//                        System.out.println("THAT'S " + i);
+                    } else if (ste.getParamType(ste.getParamCount()-i-1).equals("arr")) {
+                        pb.add(new Code(giveCode("ASSIGN", "#" + ss.pop(), "" + ste.getParameterAddresses().get(ste.getParamCount()-i-1))));
+//                        System.out.println("THAT'S " + i);
                     }
                 }
 
