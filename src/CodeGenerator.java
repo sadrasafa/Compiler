@@ -37,7 +37,7 @@ public class CodeGenerator {
         return scopeStack;
     }
 
-    public void generateCode(String action, Token lastToken) {
+    public boolean generateCode(String action, Token lastToken) {
 
         System.out.println("***************************************************************************************");
         System.out.println("action = " + action);
@@ -52,7 +52,7 @@ public class CodeGenerator {
         SymbolTableEntry ste, ste2, ste3;
         switch (action) {
             case "incScope":
-                if(ss.peek().startsWith("!")) {
+                if (ss.peek().startsWith("!")) {
                     int paramCnt = Integer.parseInt(ss.pop().substring(1));
                     scopeStack.push(st.getSize() - paramCnt);
                 } else {
@@ -79,14 +79,11 @@ public class CodeGenerator {
                 if (ss.get(top).contains("#")) {
                     stringNumber = ss.get(top).substring(1);
                     arrIndex = Integer.parseInt(stringNumber);
-
 //                    if(arrIndex > )
-
-
+                    p = Integer.parseInt(ss.get(top - 1)) + ((arrIndex) * 4); //base + displacement
+                } else {
+                    p = Integer.parseInt(ss.get(top - 1)) + (Integer.parseInt(ss.get(top)) * 4); //base + displacement
                 }
-
-                p = Integer.parseInt(ss.get(top - 1)) + (Integer.parseInt(ss.get(top)) * 4); //base + displacement
-
                 ss.pop();
                 ss.push("" + p);
 
@@ -96,9 +93,9 @@ public class CodeGenerator {
                 t = gettemp();
 
                 if (ss.get(top - 1).equals("11111"))
-                    pb.add(new Code(giveCode("ADD", ss.get(top), ss.get(top - 2), "" + t)));
+                    pb.add(new Code(giveCode("ADD", ss.get(top - 2), ss.get(top), "" + t)));
                 else if (ss.get(top - 1).equals("22222"))
-                    pb.add(new Code(giveCode("SUB", ss.get(top), ss.get(top - 2), "" + t)));
+                    pb.add(new Code(giveCode("SUB", ss.get(top - 2), ss.get(top), "" + t)));
                 ss.pop();
                 ss.pop();
                 ss.pop();
@@ -109,9 +106,9 @@ public class CodeGenerator {
 
                 t = gettemp();
                 if (ss.get(top - 1).equals("33333"))
-                    pb.add(new Code(giveCode("MULT", ss.get(top), ss.get(top - 2), "" + t)));
+                    pb.add(new Code(giveCode("MULT", ss.get(top - 2), ss.get(top), "" + t)));
                 else if (ss.get(top - 1).equals("44444"))
-                    pb.add(new Code(giveCode("DIV", ss.get(top), ss.get(top - 2), "" + t)));
+                    pb.add(new Code(giveCode("DIV", ss.get(top - 2), ss.get(top), "" + t)));
                 ss.pop();
                 ss.pop();
                 ss.pop();
@@ -172,8 +169,8 @@ public class CodeGenerator {
             case "defVar":
                 ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top)));
                 if (ss.get(top - 1).equals("000")) {
-                    System.out.println("ERROR!!!!");
-                    return; // TODO: 07/07/17 return false
+                    System.out.println("ERROR!!!! Void type specifier!");
+                    return false;
                 }
 //                ste = st.findWithID(input);
                 ste.setAddress(getAddress());
@@ -184,8 +181,8 @@ public class CodeGenerator {
                 ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top)));
 //                ste = st.findWithID(input);
                 if (ss.get(top - 1).equals("000")) {
-                    System.out.println("ERROR!!!!");
-                    return; // TODO: 07/07/17 return false
+                    System.out.println("ERROR!!!! Void type specifier!");
+                    return false;
                 }
 
 
@@ -201,8 +198,8 @@ public class CodeGenerator {
                 ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top)));
 //                ste = st.findWithID(input);
                 if (ss.get(top - 1).equals("000")) {
-                    System.out.println("ERROR!!!!");
-                    return; // TODO: 07/07/17 return false
+                    System.out.println("ERROR!!!! Void type specifier!");
+                    return false;
                 }
 
 
@@ -219,8 +216,8 @@ public class CodeGenerator {
                 num = Integer.parseInt(ss.get(top).substring(1));
 
                 if (ss.get(top - 2).equals("000")) {
-                    System.out.println("ERROR!!!!");
-                    return; // TODO: 07/07/17 return false
+                    System.out.println("ERROR!!!! Void type specifier!");
+                    return false;
                 }
 
                 ste.setLimit(num - 1);
@@ -408,6 +405,8 @@ public class CodeGenerator {
             System.out.println("" + i + ". " + pb.get(i).getCode());
         }
         System.out.println("---------------------------------");
+
+        return true;
 
     }
 
