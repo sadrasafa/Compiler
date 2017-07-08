@@ -15,7 +15,7 @@ public class CodeGenerator {
     private int temp, address;
     private int jumpAddr = -1;
     private int funcIndex;
-    private Stack<Integer> scopeStack;
+    public static Stack<Integer> scopeStack;
 
 
     public CodeGenerator() {
@@ -30,6 +30,11 @@ public class CodeGenerator {
         address = 100;
 
         pb.add(new Code("NULL"));
+    }
+
+
+    public Stack<Integer> getScopeStack() {
+        return scopeStack;
     }
 
     public void generateCode(String action, Token lastToken) {
@@ -47,13 +52,17 @@ public class CodeGenerator {
         SymbolTableEntry ste, ste2, ste3;
         switch (action) {
             case "incScope":
-                   scopeStack.push(st.getSize());
+                if(ss.peek().startsWith("!")) {
+                    int paramCnt = Integer.parseInt(ss.pop().substring(1));
+                    scopeStack.push(st.getSize() - paramCnt);
+                } else {
+                    scopeStack.push(st.getSize());
+                }
                 break;
             case "decScope":
                 int toRemove = scopeStack.pop();
-                for (int i = toRemove; i < scopeStack.size(); i++) {
-                    st.remove(i);
-                }
+                int size = scopeStack.size();
+                st.remove(toRemove);
                 break;
             case "pid":
                 int p;
@@ -229,7 +238,7 @@ public class CodeGenerator {
 //                scopeStack.push(Integer.parseInt(ss.get(top)));
 //                pb.add(new Code(giveCode("JP", "@" + ste.getReturnAddr())));
 
-                if(pb.get(0).getCode().equals("NULL") && ste.getName().equals("main")){
+                if (pb.get(0).getCode().equals("NULL") && ste.getName().equals("main")) {
                     pb.get(0).setCode(giveCode("JP", "" + pb.size()));
                 }
 
@@ -306,6 +315,8 @@ public class CodeGenerator {
 
                 ste.setReturnAddr(getAddress());
 
+                ss.push("!" + ste.getParamCount());
+
 
                 System.out.println("SORRY");
 
@@ -317,6 +328,8 @@ public class CodeGenerator {
 
                 ste = st.getEntry(Integer.parseInt(ss.get(top)));
                 pb.add(new Code(giveCode("JP", "@" + ste.getReturnAddr())));
+                ss.pop();
+                ss.pop();
 
                 break;
             case "pushAddrForJump":
@@ -349,7 +362,7 @@ public class CodeGenerator {
 //                ss.push("" + ste.getReturnValueAddress());
 
                 pb.add(new Code(giveCode("JP", "" + jumpAddr)));
-                pb.add(new Code(giveCode("ASSIGN", "" + ste.getReturnValueAddress() , "" + t2)));
+                pb.add(new Code(giveCode("ASSIGN", "" + ste.getReturnValueAddress(), "" + t2)));
 
                 ss.push("" + t2);
 
@@ -383,7 +396,7 @@ public class CodeGenerator {
             System.out.println("scopeStack " + i + " = " + scopeStack.get(i));
         }
 
-            ScannerCompiler.symbolTable.print();
+        ScannerCompiler.symbolTable.print();
 
         System.out.println("SS: ");
         for (int i = 0; i < ss.size(); i++) {
