@@ -596,8 +596,8 @@ public class Grammar {
         asOutput.setFollow(symStatement.getFollow());
         asIncScope.setFollow(new ArrayList<>(Arrays.asList(symInt, symVoid, symWhile, symReturn, symID, symOpenAk, symSemicolon, symIf, symCloseAk)));
         asDecScope.setFollow(symCompoundStmt.getFollow());
-        printFirst();
-        printFollow();
+//        printFirst();
+//        printFollow();
 //        printPoxFollow();
 //        printAllProductions();
 
@@ -940,9 +940,9 @@ public class Grammar {
 
         }
 //        LRcollections.get(0).printItemSet();
-        for (ItemSet is : LRcollections) {
-            is.showThisItemSet();
-        }
+//        for (ItemSet is : LRcollections) {
+//            is.showThisItemSet();
+//        }
 //        for (ItemSet is: LRcollections) {
 //            is.poxiGorsat();
 //        }
@@ -1188,18 +1188,18 @@ public class Grammar {
             parseTable.add(row);
         }
 
-        int n = 0;
-        for (HashMap<Symbol, ParseAction> row: parseTable) {
-            System.out.println(n++);
-            for (Map.Entry<Symbol, ParseAction> pair: row.entrySet()) {
-                System.out.print(pair.getKey().getName()+" ");
-                pair.getValue().printAction();
-                System.out.print(" , ");
-            }
-            System.out.println();
-            System.out.println("_______________");
-
-        }
+//        int n = 0;
+//        for (HashMap<Symbol, ParseAction> row: parseTable) {
+//            System.out.println(n++);
+//            for (Map.Entry<Symbol, ParseAction> pair: row.entrySet()) {
+//                System.out.print(pair.getKey().getName()+" ");
+//                pair.getValue().printAction();
+//                System.out.print(" , ");
+//            }
+//            System.out.println();
+//            System.out.println("_______________");
+//
+//        }
 
 
         return parseTable;
