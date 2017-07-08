@@ -16,14 +16,12 @@ public class Parser {
     private ArrayList<HashMap<Symbol, ParseAction>> parseTable;
     private Stack<Integer> stack;
     private CodeGenerator codeGenerator;
-    private boolean goOn;
     public Parser(String filePath) throws IOException{
         grammar = new Grammar();
         parseTable = grammar.createParseTable();
         scanner = new ScannerCompiler(filePath);
         codeGenerator = new CodeGenerator();
         stack = new Stack<>();
-        goOn = true;
         parse();
 
     }
@@ -36,7 +34,7 @@ public class Parser {
         Symbol token = tkn.getSymbol(); //token = a
         ParseAction action;
         System.out.println("PARSING STARTED");
-        while (goOn) {
+        while (true) {
 //            System.out.println("_______________");
 //            System.out.println("STACK: "+stack + "TOKEN: "+token.getName());
             top = stack.peek();
@@ -119,7 +117,7 @@ public class Parser {
                     System.out.println("Tkn = " + tkn.getAttr());
 
 
-                    goOn = codeGenerator.generateCode(A.getName(), lastTkn);
+                    codeGenerator.generateCode(A.getName(), lastTkn);
                 }
             }
             else if (action.getType() == ParseAction.ACC) {

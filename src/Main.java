@@ -8,7 +8,7 @@ import java.util.Scanner;
  */
 public class Main {
     public static void main(String[] args) throws IOException {
-        String filePath = "/home/safa/scannerTest/test_v5.c";
+        String filePath = "/home/aarash/scannerTest/test_v6.c";
         Parser parser = new Parser(filePath);
     }
 }
