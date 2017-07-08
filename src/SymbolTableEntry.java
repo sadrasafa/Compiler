@@ -12,10 +12,27 @@ public class SymbolTableEntry {
     private int address;
     private boolean function;
     private int functionAddressPB;
+    private boolean intReturnType; //true : int , fasle : void
+    private int returnValueAddress;
     private int returnAddr;
     private int limit = -1;
     private ArrayList<Integer> parameterAddresses = null;
 
+    public int getReturnValueAddress() {
+        return returnValueAddress;
+    }
+
+    public void setReturnValueAddress(int returnValueAddress) {
+        this.returnValueAddress = returnValueAddress;
+    }
+
+    public boolean isIntReturnType() {
+        return intReturnType;
+    }
+
+    public void setIntReturnType(boolean intReturnType) {
+        this.intReturnType = intReturnType;
+    }
 
     public int getLimit() {
         return limit;

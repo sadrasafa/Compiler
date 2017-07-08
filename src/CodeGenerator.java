@@ -13,6 +13,9 @@ public class CodeGenerator {
     private Stack<String> functionStack;
     private Stack<Integer> returnAddr;
     private int temp, address;
+    private int jumpAddr = -1;
+    private int funcIndex;
+
 
     public CodeGenerator() {
         ss = new Stack<>();
@@ -34,7 +37,7 @@ public class CodeGenerator {
         int top = ss.size() - 1;
         int t, t1, t2, t3;
         int num;
-        int jumpAddr = -1;
+//        int jumpAddr = -1;
         action = action.substring(1);
         SymbolTableEntry ste, ste2, ste3;
         switch (action) {
@@ -107,12 +110,13 @@ public class CodeGenerator {
             case "save":
 
                 ss.push("" + pb.size());
+                System.out.println("pb.size() = " + pb.size());
                 pb.add(new Code("NULL"));
 
                 break;
             case "while":
 
-                pb.get(Integer.parseInt(ss.get(top))).setCode(giveCode("JPF", (ss.get(top - 1)), "" + pb.size()));
+                pb.get(Integer.parseInt(ss.get(top))).setCode(giveCode("JPF", (ss.get(top - 1)), "" + (pb.size() + 1)));
                 pb.add(new Code(giveCode("JP", (ss.get(top - 2)))));
                 ss.pop();
                 ss.pop();
@@ -121,7 +125,8 @@ public class CodeGenerator {
                 break;
             case "jpf_save":
 
-                pb.get(Integer.parseInt(ss.get(top))).setCode(giveCode("JPF", ss.get(top - 1), "" + ss.size()));
+                printSS();
+                pb.get(Integer.parseInt(ss.get(top))).setCode(giveCode("JPF", ss.get(top - 1), "" + (pb.size() + 1)));
                 ss.pop();
                 ss.pop();
                 ss.push("" + pb.size());
@@ -130,30 +135,42 @@ public class CodeGenerator {
                 break;
             case "jp":
 
-                pb.get(Integer.parseInt(ss.get(top))).setCode(giveCode("JP", "" + (pb.size() - 1))); //i == pb.size() - 1
+                pb.get(Integer.parseInt(ss.get(top))).setCode(giveCode("JP", "" + (pb.size()))); //i == pb.size() - 1
                 ss.pop();
 
                 break;
             case "jpf":
 
-                pb.get(Integer.parseInt(ss.get(top))).setCode(giveCode("JPF", ss.get(top - 1), "" + (pb.size() - 1)));
+                pb.get(Integer.parseInt(ss.get(top))).setCode(giveCode("JPF", ss.get(top - 1), "" + (pb.size())));
                 ss.pop();
                 ss.pop();
 
                 break;
             case "defVar":
                 ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top)));
+                if(ss.get(top - 1).equals("000")){
+                    System.out.println("ERROR!!!!");
+                    return; // TODO: 07/07/17 return false
+                }
 //                ste = st.findWithID(input);
                 ste.setAddress(getAddress());
+                ss.pop();
                 ss.pop();
                 break;
             case "defVarForFunc":
                 ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top)));
 //                ste = st.findWithID(input);
+                if(ss.get(top - 1).equals("000")){
+                    System.out.println("ERROR!!!!");
+                    return; // TODO: 07/07/17 return false
+                }
+
+
                 ste.setAddress(getAddress());
 
-                ste2 = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top - 1))); //function's entry
+                ste2 = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top - 2))); //function's entry
                 ste2.addParam(ste.getAddress());
+                ss.pop();
                 ss.pop();
                 break;
             case "defArrForFunc":
@@ -162,6 +179,12 @@ public class CodeGenerator {
             case "defArr":
                 ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top - 1)));
                 num = Integer.parseInt(ss.get(top).substring(1));
+
+                if(ss.get(top - 2).equals("000")){
+                    System.out.println("ERROR!!!!");
+                    return; // TODO: 07/07/17 return false
+                }
+
                 ste.setLimit(num - 1);
                 ste.setAddress(getAddress());
                 for (int i = 0; i < num - 1; i++) {
@@ -169,10 +192,22 @@ public class CodeGenerator {
                 }
                 ss.pop();
                 ss.pop();
+                ss.pop();
                 break;
             case "defFunc":
 
                 ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top)));
+//                pb.add(new Code(giveCode("JP", "@" + ste.getReturnAddr())));
+                if(ss.get(top - 1).equals("000")){
+
+                    ste.setIntReturnType(false);
+
+                } else if(ss.get(top - 1).equals("321")){
+
+                    ste.setIntReturnType(true);
+                    ste.setReturnValueAddress(getAddress());
+
+                }
                 ste.setFunction(true);
 
 
@@ -231,28 +266,40 @@ public class CodeGenerator {
                 break;
             case "assignPars":
 
-                ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top)));
+                ste = st.getEntry(Integer.parseInt(ss.get(top)));
 
                 ste.setFunctionAddressPB(pb.size());
 
-                System.out.println("SS: ");
-                for (int i = 0; i < ss.size(); i++) {
-                    System.out.println("ss.get(" +  i + ") = " + ss.get(i));
-                }
-                ss.pop();
+                ste.setReturnAddr(getAddress());
+
+
+
                 System.out.println("SORRY");
 
 
 //                ss.pop();
                 break;
+
+            case "returnToMain":
+
+                ste = st.getEntry(Integer.parseInt(ss.get(top - 1)));
+                pb.add(new Code(giveCode("JP", "@" + ste.getReturnAddr())));
+
+                break;
             case "pushAddrForJump":
 
                 int temp2 = pb.size();
-                ste = ScannerCompiler.symbolTable.getEntry(Integer.parseInt(ss.get(top)));
-
+                ste = ScannerCompiler.symbolTable.getEntry(lastToken.getAttr());
+                funcIndex = lastToken.getAttr();
                 jumpAddr = ste.getFunctionAddressPB();
 
-                ste.setReturnAddr(getAddress());
+                pb.add(new Code(giveCode("ASSIGN", "" + (temp2 + 2), "" + ste.getReturnAddr())));
+
+
+                break;
+            case "call":
+
+                ste = st.getEntry(funcIndex);
 
                 for (int i = 0; i < ste.getParamCount(); i++) {
 
@@ -262,16 +309,9 @@ public class CodeGenerator {
 
                 }
 
-
-
-                pb.add(new Code(giveCode("ASSIGN", "" + (temp2 + 2), "" + ste.getReturnAddr())));
-
-
-                break;
-            case "call":
+                ss.push("" + ste.getReturnValueAddress());
 
                 pb.add(new Code(giveCode("JP", "" + jumpAddr)));
-
 
 
 //                returnAddr.push(pb.size());
@@ -281,7 +321,16 @@ public class CodeGenerator {
 
                 break;
             case "return":
-                // TODO: 07/07/17
+                ste = st.getEntry(Integer.parseInt(ss.get(top -1)));
+                pb.add(new Code(giveCode("ASSIGN", ss.get(top), "" + ste.getReturnValueAddress())));
+                break;
+
+            case "pushInt":
+                System.out.println("FUCK");
+                ss.push("321");
+                break;
+            case "pushVoid":
+                ss.push("000");
                 break;
                 // TODO: 06/07/17 More actions
         }
@@ -294,6 +343,11 @@ public class CodeGenerator {
             System.out.println("ss.get(" +  i + ") = " + ss.get(i));
         }
 
+        System.out.println("PB till now:---------------------------");
+        for (int i = 0; i < pb.size(); i++) {
+            System.out.println("" + i + ". " + pb.get(i).getCode());
+        }
+        System.out.println("---------------------------------");
 
     }
 
@@ -319,6 +373,13 @@ public class CodeGenerator {
         int toReturn = address;
         address += 4;
         return toReturn;
+    }
+
+    private void printSS(){
+        System.out.println("SS: ");
+        for (int i = 0; i < ss.size(); i++) {
+            System.out.println("ss.get(" +  i + ") = " + ss.get(i));
+        }
     }
 
     public ArrayList<Code> getPb() {

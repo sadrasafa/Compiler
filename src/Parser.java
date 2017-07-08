@@ -110,6 +110,13 @@ public class Parser {
 //                System.out.print("REDUCE : ");
 //                production.printProduction();
                 if (A.isActionSymbol()) {
+
+                    System.out.println("lastTkn = " + lastTkn.getType());
+                    System.out.println("lastTkn = " + lastTkn.getAttr());
+                    System.out.println("Tkn = " + tkn.getType());
+                    System.out.println("Tkn = " + tkn.getAttr());
+
+
                     codeGenerator.generateCode(A.getName(), lastTkn);
                 }
             }

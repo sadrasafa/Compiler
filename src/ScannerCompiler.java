@@ -153,7 +153,7 @@ public class ScannerCompiler {
 //                    break;
                 case '}':
 //                    scope--; // TODO: 07/07/17
-                    return new Token("RIGHTAK", 0, "}");
+                    return new Token("RIGHT AK", 0, "}");
 //                    returningToken = "RIGHTAK";
 //                    break;
                 case '*':
