@@ -435,9 +435,9 @@ public class Grammar {
         Production p29_2 = new Production(symArgs);
         Production p30_1 = new Production(symArgsList, new Symbol[]{symArgsList, symComma, symExpression});
         Production p30_2 = new Production(symArgsList, new Symbol[]{symExpression});
-        Production p31_1 = new Production(symStatement, new Symbol[]{symOutputTerminal, symOpenPar, symID, asPid, symClosePar, asOutput});
-        Production p31_2 = new Production(symStatement, new Symbol[]{symOutputTerminal, symOpenPar, symNum, asPushNum, symClosePar, asOutput});
-
+//        Production p31_1 = new Production(symStatement, new Symbol[]{symOutputTerminal, symOpenPar, symID, asPid, symClosePar, asOutput});
+//        Production p31_2 = new Production(symStatement, new Symbol[]{symOutputTerminal, symOpenPar, symNum, asPushNum, symClosePar, asOutput});
+        Production p31 = new Production(symStatement, new Symbol[]{symOutputTerminal, symOpenPar, symExpression, symClosePar, asOutput});
 
 
         Production pPushID = new Production(asPushID);
@@ -479,7 +479,7 @@ public class Grammar {
         productions = new ArrayList<>(Arrays.asList(p0, p1, p2_1, p2_2, p3_1, p3_2, p4_1, p4_2, p6, p7_1, p7_2, p8_1, p8_2, p9_1, p9_2, p10_1, p10_2));
         productions.addAll(new ArrayList<>(Arrays.asList(p11, p12_1, p12_2, p13_1, p13_2, p14_1, p14_2, p14_3, p14_4, p14_5, p15_1, p15_2, p16_1, p16_2)));
         productions.addAll(new ArrayList<>(Arrays.asList(p17, p18_1, p18_2, p19_1, p19_2, p20_1, p20_2, p21_1, p21_2, p22_1, p22_2, p23_1, p23_2, p24_1, p24_2)));
-        productions.addAll(new ArrayList<>(Arrays.asList(p25_1, p25_2, p26_1, p26_2, p27_1, p27_2, p27_3, p27_4, p28, p29_1, p29_2, p30_1, p30_2, p31_1, p31_2)));
+        productions.addAll(new ArrayList<>(Arrays.asList(p25_1, p25_2, p26_1, p26_2, p27_1, p27_2, p27_3, p27_4, p28, p29_1, p29_2, p30_1, p30_2, p31)));
 //        productions.addAll(new ArrayList<>(Arrays.asList(p25_1, p25_2, p26_1, p26_2, p27_1, p27_2, p27_3, p28, p29_1, p29_2, p30_1, p30_2)));
 
 

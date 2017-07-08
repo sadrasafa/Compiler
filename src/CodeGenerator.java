@@ -15,7 +15,7 @@ public class CodeGenerator {
     private int temp, address;
     private int jumpAddr = -1;
     private int funcIndex;
-    public static Stack<Integer> scopeStack;
+    private Stack<Integer> scopeStack;
 
 
     public CodeGenerator() {
@@ -32,16 +32,11 @@ public class CodeGenerator {
         pb.add(new Code("NULL"));
     }
 
-
-    public Stack<Integer> getScopeStack() {
-        return scopeStack;
-    }
-
     public void generateCode(String action, Token lastToken) {
 
-        System.out.println("***************************************************************************************");
-        System.out.println("action = " + action);
-        System.out.println("lastToken = " + lastToken.print());
+//        System.out.println("***************************************************************************************");
+//        System.out.println("action = " + action);
+//        System.out.println("lastToken = " + lastToken.print());
 
 
         int top = ss.size() - 1;
@@ -52,17 +47,13 @@ public class CodeGenerator {
         SymbolTableEntry ste, ste2, ste3;
         switch (action) {
             case "incScope":
-                if(ss.peek().startsWith("!")) {
-                    int paramCnt = Integer.parseInt(ss.pop().substring(1));
-                    scopeStack.push(st.getSize() - paramCnt);
-                } else {
-                    scopeStack.push(st.getSize());
-                }
+                   scopeStack.push(st.getSize());
                 break;
             case "decScope":
                 int toRemove = scopeStack.pop();
-                int size = scopeStack.size();
-                st.remove(toRemove);
+                for (int i = toRemove; i < scopeStack.size(); i++) {
+                    st.remove(i);
+                }
                 break;
             case "pid":
                 int p;
@@ -133,7 +124,7 @@ public class CodeGenerator {
             case "save":
 
                 ss.push("" + pb.size());
-                System.out.println("pb.size() = " + pb.size());
+//                System.out.println("pb.size() = " + pb.size());
                 pb.add(new Code("NULL"));
 
                 break;
@@ -148,7 +139,7 @@ public class CodeGenerator {
                 break;
             case "jpf_save":
 
-                printSS();
+//                printSS();
                 pb.get(Integer.parseInt(ss.get(top))).setCode(giveCode("JPF", ss.get(top - 1), "" + (pb.size() + 1)));
                 ss.pop();
                 ss.pop();
@@ -238,7 +229,7 @@ public class CodeGenerator {
 //                scopeStack.push(Integer.parseInt(ss.get(top)));
 //                pb.add(new Code(giveCode("JP", "@" + ste.getReturnAddr())));
 
-                if (pb.get(0).getCode().equals("NULL") && ste.getName().equals("main")) {
+                if(pb.get(0).getCode().equals("NULL") && ste.getName().equals("main")){
                     pb.get(0).setCode(giveCode("JP", "" + pb.size()));
                 }
 
@@ -315,8 +306,6 @@ public class CodeGenerator {
 
                 ste.setReturnAddr(getAddress());
 
-                ss.push("!" + ste.getParamCount());
-
 
                 System.out.println("SORRY");
 
@@ -328,8 +317,6 @@ public class CodeGenerator {
 
                 ste = st.getEntry(Integer.parseInt(ss.get(top)));
                 pb.add(new Code(giveCode("JP", "@" + ste.getReturnAddr())));
-                ss.pop();
-                ss.pop();
 
                 break;
             case "pushAddrForJump":
@@ -362,7 +349,7 @@ public class CodeGenerator {
 //                ss.push("" + ste.getReturnValueAddress());
 
                 pb.add(new Code(giveCode("JP", "" + jumpAddr)));
-                pb.add(new Code(giveCode("ASSIGN", "" + ste.getReturnValueAddress(), "" + t2)));
+                pb.add(new Code(giveCode("ASSIGN", "" + ste.getReturnValueAddress() , "" + t2)));
 
                 ss.push("" + t2);
 
@@ -396,18 +383,18 @@ public class CodeGenerator {
             System.out.println("scopeStack " + i + " = " + scopeStack.get(i));
         }
 
-        ScannerCompiler.symbolTable.print();
+//            ScannerCompiler.symbolTable.print();
 
-        System.out.println("SS: ");
-        for (int i = 0; i < ss.size(); i++) {
-            System.out.println("ss.get(" + i + ") = " + ss.get(i));
-        }
-
-        System.out.println("PB till now:---------------------------");
-        for (int i = 0; i < pb.size(); i++) {
-            System.out.println("" + i + ". " + pb.get(i).getCode());
-        }
-        System.out.println("---------------------------------");
+//        System.out.println("SS: ");
+//        for (int i = 0; i < ss.size(); i++) {
+//            System.out.println("ss.get(" + i + ") = " + ss.get(i));
+//        }
+//
+//        System.out.println("PB till now:---------------------------");
+//        for (int i = 0; i < pb.size(); i++) {
+//            System.out.println("" + i + ". " + pb.get(i).getCode());
+//        }
+//        System.out.println("---------------------------------");
 
     }
 

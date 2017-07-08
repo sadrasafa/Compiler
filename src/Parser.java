@@ -35,8 +35,9 @@ public class Parser {
         ParseAction action;
         System.out.println("PARSING STARTED");
         while (true) {
+//            System.out.println("read Token: " +token.getName());
 //            System.out.println("_______________");
-//            System.out.println("STACK: "+stack + "TOKEN: "+token.getName());
+            System.out.println("STACK: "+stack + "TOKEN: "+token.getName());
             top = stack.peek();
             action = parseTable.get(top).get(token);
             if (action==null) {
@@ -82,6 +83,7 @@ public class Parser {
                 action =  parseTable.get(top).get(istadighimNT);
                 Integer t = action.getDest();
                 stack.push(t);
+                System.out.println("YA ABALFAAAZL");
 
             }
             else if (action.getType() == ParseAction.SHIFT) {
@@ -90,7 +92,7 @@ public class Parser {
                 lastTkn = tkn;
                 tkn = scanner.getToken();
                 token = tkn.getSymbol();
-//                System.out.println("PUSHED "+t);
+                System.out.println("PUSHED "+t);
             }
             else if (action.getType() == ParseAction.REDUCE) {
                 int productionNumber = action.getDest();
@@ -107,14 +109,14 @@ public class Parser {
                 }
                 Integer t =  goTo.getDest(); //todo aya goTo si olmasa neyniyak? ya hammasha olar?
                 stack.push(t);
-//                System.out.print("REDUCE : ");
-//                production.printProduction();
+                System.out.print("REDUCE : ");
+                production.printProduction();
                 if (A.isActionSymbol()) {
 
-                    System.out.println("lastTkn = " + lastTkn.getType());
-                    System.out.println("lastTkn = " + lastTkn.getAttr());
-                    System.out.println("Tkn = " + tkn.getType());
-                    System.out.println("Tkn = " + tkn.getAttr());
+//                    System.out.println("lastTkn = " + lastTkn.getType());
+//                    System.out.println("lastTkn = " + lastTkn.getAttr());
+//                    System.out.println("Tkn = " + tkn.getType());
+//                    System.out.println("Tkn = " + tkn.getAttr());
 
 
                     codeGenerator.generateCode(A.getName(), lastTkn);
@@ -133,8 +135,8 @@ public class Parser {
 
         System.out.println("codeGenerator = " + codeGenerator.getPb().size());
 
-        ScannerCompiler.symbolTable.print();
-
+//        ScannerCompiler.symbolTable.print();
+//
         for (int i = 0; i < codeGenerator.getPb().size(); i++) {
             System.out.println("" + i  + " : " + codeGenerator.getPb().get(i).getCode());
         }
